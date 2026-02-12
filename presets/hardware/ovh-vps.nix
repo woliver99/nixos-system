@@ -1,4 +1,4 @@
-# Common config for a standard proxmox virtual machine
+# Common config for a standard ovh vps
 
 { ... }:
 

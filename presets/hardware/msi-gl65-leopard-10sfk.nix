@@ -9,7 +9,6 @@
 }:
 
 let
-  # --- HELPER FUNCTIONS (From the Docs) ---
   # These create a high-priority "fake" package that contains only the modified desktop file.
   patchDesktop =
     pkg: appName: from: to:
@@ -29,8 +28,7 @@ in
     ../../nixos-hardware/msi/gl65 # Import from nixos-hardware repository
   ];
 
-  # Make everything run on the gpu by default
-  #hardware.nvidia.prime.offload.enable = false;
+  hardware.nvidia.open = false;
 
   environment.systemPackages = lib.mkIf (!(lib.elem "battery-saver" config.system.nixos.tags)) [
     (GPUOffloadApp pkgs.steam "steam")
@@ -39,8 +37,6 @@ in
   # Enable battery saver specialisation from nixos-hardware
   hardware.nvidia.primeBatterySaverSpecialisation = true;
   specialisation."battery-saver".configuration = {
-    #hardware.nvidia.prime.sync.enable = lib.mkForce false;
-    #hardware.nvidia.prime.reverseSync.enable = lib.mkForce false;
     hardware.nvidia.prime.offload.enableOffloadCmd = lib.mkForce false;
 
     # RE-ENABLE SLEEP & SUSPEND
