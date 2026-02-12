@@ -16,3 +16,7 @@ sudo git submodule add https://github.com/woliver99/nixos-system.git nixos-syste
 ```
 sudo git submodule update --init --recursive
 ```
+5. Update repository
+```
+sudo git submodule update --remote --merge
+```
