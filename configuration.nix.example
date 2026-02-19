@@ -19,7 +19,8 @@
     ./nixos-system/features/grub-dualboot.nix # Adds other operating systems (like Windows) to grub
     ./nixos-system/features/firewall.nix # Enables the system firewall (might break some apps if not configured properly)
     ./nixos-system/features/flatpak.nix # Installs Flatpak for easy sandbox app installs for users
-    ./nixos-system/features/printing.nix # Adds support for most printers
+    ./nixos-system/features/printers # Adds support for most printers
+    ./nixos-system/features/printers/epson.nix # Adds drivers for epson printers
     ./nixos-system/features/vpn.nix # Adds support for most vpns
     ./nixos-system/features/steam.nix # Installs Steam
     ./nixos-system/features/drawing-tablet.nix # Adds support for most drawing tablets
@@ -50,16 +51,6 @@
       #11434 # Ollama
     ];
   };
-
-  # Extra printer support (./features/printing.nix)
-  services.printing.drivers = [
-    pkgs.epson-escpr # Epson
-  ];
-
-  # Extra scanner support (./features/printing.nix)
-  hardware.sane.extraBackends = [
-    pkgs.epsonscan2 # Epson
-  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

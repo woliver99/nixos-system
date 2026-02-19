@@ -17,13 +17,19 @@
     # -- GUI --
     alacritty # Better Terminal
 
-    gparted
-    localsend
-    filezilla
-    pdfarranger
-    vlc
-    brave
-    file-roller
+    gparted # Better file partitions
+    localsend # Send files locally
+    file-roller # Archive viewer
+
+    vlc # Music/Audio
+    brave # Browser
+
+    xournalpp # PDF editor
+    pdfarranger # Arrange PDFs
+
+    soundconverter # Convert sounds
+    switcheroo # Image conversion
+    losslesscut-bin # Trim video without rencoding
 
     # LibreOffice
     libreoffice-still

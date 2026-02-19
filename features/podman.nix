@@ -1,7 +1,9 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   virtualisation.containers.enable = true;
+
+  virtualisation.containers.registries.search = [ "docker.io" ];
 
   virtualisation = {
     podman = {
@@ -16,4 +18,8 @@
   };
 
   virtualisation.oci-containers.backend = "podman";
+
+  environment.systemPackages = with pkgs; [
+    podman-compose
+  ];
 }

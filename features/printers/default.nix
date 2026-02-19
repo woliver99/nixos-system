@@ -19,6 +19,7 @@
     enable = true;
     nssmdns4 = true;
     openFirewall = true;
+    # GNOME auto adds printers for some reason? (https://gitlab.gnome.org/GNOME/gnome-control-center/-/issues/1001)
   };
 
   # Scanning

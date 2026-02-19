@@ -27,6 +27,19 @@
   environment.systemPackages = with pkgs; [
     alacritty # Better Terminal
 
+    # Fake gnome-terminal to trick GNOME into using Alacritty
+    (writeShellScriptBin "gnome-terminal" ''
+      args=()
+      for arg in "$@"; do
+        if [ "$arg" == "--" ]; then
+          args+=("-e")
+        else
+          args+=("$arg")
+        fi
+      done
+      exec ${alacritty}/bin/alacritty "''${args[@]}"
+    '')
+
     # GNOME extensions (enable them with the extensions app)
     gnomeExtensions.copyous
     gnomeExtensions.appindicator
