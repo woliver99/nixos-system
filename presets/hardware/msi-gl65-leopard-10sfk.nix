@@ -34,6 +34,10 @@ in
     (GPUOffloadApp pkgs.steam "steam")
   ];
 
+  programs.obs-studio.package = pkgs.obs-studio.override {
+    cudaSupport = true;
+  };
+
   # Enable battery saver specialisation from nixos-hardware
   hardware.nvidia.primeBatterySaverSpecialisation = true;
   specialisation."battery-saver".configuration = {

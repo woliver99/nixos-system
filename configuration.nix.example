@@ -23,6 +23,7 @@
     ./nixos-system/features/printers/epson.nix # Adds drivers for epson printers
     ./nixos-system/features/vpn.nix # Adds support for most vpns
     ./nixos-system/features/steam.nix # Installs Steam
+    ./nixos-system/features/obs.nix # Installs OBS
     ./nixos-system/features/drawing-tablet.nix # Adds support for most drawing tablets
     ./nixos-system/features/ssh.nix # Installs ssh only accessible via public keys (disables password logins)
     ./nixos-system/features/remote-desktop.nix # Installs Gnome remote desktop which works over rdp (should only be enabled when using Gnome)
