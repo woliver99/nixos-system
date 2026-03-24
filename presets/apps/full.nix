@@ -40,9 +40,6 @@
   networking.firewall = {
     allowedTCPPorts = [
       53317 # Localsend
-
-      1598 # LibreOffice Remote
-      1599 # LibreOffice Remote
     ];
     allowedUDPPorts = [
       53317 # Localsend
