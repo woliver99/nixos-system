@@ -1,15 +1,11 @@
 # Common files for my nixvim config
 
+# sudo nix-channel --add https://github.com/nix-community/nixvim/archive/refs/heads/nixos-25.11.tar.gz nixvim && sudo nix-channel --update nixvim
+
 { pkgs, ... }:
 
 let
-  nixvim = import (
-    builtins.fetchGit {
-      url = "https://github.com/nix-community/nixvim";
-      # If you are not running an unstable channel of nixpkgs, select the corresponding branch of Nixvim.
-      ref = "nixos-25.11";
-    }
-  );
+  nixvim = import <nixvim>;
 in
 {
   imports = [ nixvim.nixosModules.nixvim ];
