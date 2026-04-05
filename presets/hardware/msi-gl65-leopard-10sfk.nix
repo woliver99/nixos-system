@@ -56,9 +56,9 @@ in
 
   # SSD fixes (probably not a laptop problem but keeping it here anyways)
   boot.kernelParams = [
-    "nvme_core.default_ps_max_latency_us=0" # Fix NVMe SSD timeouts (prevent deep sleep)
-    "pcie_aspm=off" # Uses more power but testing if this fixes a crash on boot
-    "acpi_enforce_resources=lax" # This fixes the motherboard crash when Native ASPM is Enabled.
+    "nvme_core.default_ps_max_latency_us=0" # Stop the drive itself from sleeping
+    "pcie_aspm=off" # Stop hardware-level link power saving
+    "pcie_port_pm=off" # Stop OS-level PCIe port suspending
   ];
 
   # Disable all sleep and suspend states since it causes many problems with the Nvidia drivers
