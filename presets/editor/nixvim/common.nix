@@ -174,6 +174,9 @@ in
             installCargo = false;
             installRustc = false;
           };
+          html.enable = true;
+          cssls.enable = true;
+          ts_ls.enable = true;
         };
       };
 
@@ -183,6 +186,9 @@ in
           formatters_by_ft = {
             nix = [ "nixfmt" ];
             #rust = [ "rustfmt" ];
+            html = [ "prettier" ];
+            css = [ "prettier" ];
+            javascript = [ "prettier" ];
           };
         };
 
@@ -200,6 +206,7 @@ in
 
     # Formatters
     nixfmt-rfc-style
+    nodePackages.prettier
 
     # vi and vim alias
     (pkgs.writeShellScriptBin "vi" "exec nvim \"$@\"")
