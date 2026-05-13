@@ -1,9 +1,8 @@
-{ lib, ... }:
+{ ... }:
 
 {
   users.users.woliver99 = {
     isNormalUser = true;
-    uid = lib.mkOverride 990 1000;
     description = "Oliver Wuthrich-Giroux";
 
     extraGroups = [
