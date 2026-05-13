@@ -30,5 +30,17 @@
     variant = "";
   };
 
-  system.stateVersion = "25.05";
+  boot.loader.grub = {
+    enable = true;
+    #device = "/dev/sda";
+  };
+
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 8 * 1024;
+    }
+  ];
+
+  #system.stateVersion = "25.05"; # UPDATE TO YOUR VERSION
 }
