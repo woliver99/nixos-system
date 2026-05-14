@@ -17,4 +17,9 @@
       "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCuZv1PB2vvR4yAIMUkWltu8z1q0BCaoF3pUrYp0YkxGzvf72bdOG8z4iRG23hLPf1vUJkNTJn8euBgnErdoANu2glU/EkV2cVXnBFNztN3LrXveJwS1Or8m21FlhWesqXSm0saQaBFnNh7SZw2n9IHB6+w6yCE+FSgrG/gmY/EbtkxD2em06uL0wn8uTVjCtWEVP3dYqQLfVSrkL0L6tLSM0fu+p6wwJsgWJIgelf8OjrIXHmku4uDpYmc5xyBkjw8rGahYwX9ls72d5LGTLdDw0rJkTkXILn4KP1YcyAgEfIAnWZ9kuzv1PK2PQ+kQklRLowchvj3UYDgkrrMTtxtKQ4WrikG43r/raWD7TOkuCbxLGe5njJ35UNUAa718lXKbRXnwZbPLQoEkZlckitVKTeKT3Rs/wJu69jDPHrRMTnzy6dm8YvcIZarrKpIHN4LGs2AKHTK4oeCp4iZ7HXLAX6ddmFmuD9B8vgl/5DbiRiJ9+HilBaLIrXXnDCJw260Kecm1pdWfmafxkAgfMKknBZ7Vn6zxAeggwGyVDaTnR724BrxE6DJScQHI/mJGvRV5vqJuLdjYVLaKPlee09/qPDlpKYF+kF2NnZXgjuKTuL3PXhgslAJdaRZzB16SJCh+68ssgHAO/k9Pn/6GqAFZz77H0Ct8xwcGuEbmv8JeQ== oliver@1QRS403"
     ];
   };
+
+  programs.git.config.user = {
+    name = "woliver99";
+    email = "oliver@maplenetwork.ca";
+  };
 }
