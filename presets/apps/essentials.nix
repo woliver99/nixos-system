@@ -28,13 +28,15 @@
     '';
   };
 
+  programs.git.enable = true;
+
   environment.systemPackages = with pkgs; [
     htop
 
     wget
-    git
 
     zip
     unzip
   ];
+
 }
