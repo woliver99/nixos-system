@@ -14,6 +14,7 @@
     escapeTime = 0;
     clock24 = true;
     historyLimit = 50000;
+    terminal = "tmux-256color"; # screen-256color was broken with htop
 
     plugins = with pkgs; [
       tmuxPlugins.better-mouse-mode
