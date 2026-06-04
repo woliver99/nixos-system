@@ -27,7 +27,7 @@ in
       tree-sitter
       nodejs
 
-      nixfmt-rfc-style
+      nixfmt
     ];
 
     keymaps = [
@@ -125,11 +125,12 @@ in
         nixGrammars = true;
         grammarPackages = pkgs.vimPlugins.nvim-treesitter.allGrammars;
 
+        highlight = {
+          enable = true;
+          disable = [ "gitcommit" ];
+        };
+
         settings = {
-          highlight = {
-            enable = true;
-            disable = [ "gitcommit" ];
-          };
           indent.enable = true;
           folding.enable = true;
         };
@@ -205,8 +206,8 @@ in
     nixd
 
     # Formatters
-    nixfmt-rfc-style
-    nodePackages.prettier
+    nixfmt
+    prettier
 
     # vi and vim alias
     (pkgs.writeShellScriptBin "vi" "exec nvim \"$@\"")

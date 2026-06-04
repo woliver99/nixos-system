@@ -3,15 +3,6 @@
 { pkgs, lib, ... }:
 
 {
-  # Currently copyous is not in the nix repo but will be added soon: https://github.com/NixOS/nixpkgs/pull/469919
-  nixpkgs.overlays = [
-    (final: prev: {
-      gnomeExtensions = prev.gnomeExtensions // {
-        copyous = prev.callPackage ../../modules/gnome-extension-copyous.nix { };
-      };
-    })
-  ];
-
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
@@ -41,10 +32,19 @@
     '')
 
     # GNOME extensions (enable them with the extensions app)
-    gnomeExtensions.copyous
     gnomeExtensions.appindicator
     gnomeExtensions.gsconnect
     gnomeExtensions.color-picker
+
+    # copyous patch
+    (gnomeExtensions.copyous.overrideAttrs (old: {
+      buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.libgda5 ];
+      preInstall = ''
+        sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${pkgs.libgda5}/lib/girepository-1.0');\nGIRepository.Repository.dup_default().prepend_search_path('${pkgs.gsound}/lib/girepository-1.0');\n" lib/preferences/dependencies/dependencies.js
+        sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${pkgs.libgda5}/lib/girepository-1.0');\n" lib/database/entryTracker.js
+      '';
+    }))
+
   ];
 
   # Extension to add "open in console" for alacritty

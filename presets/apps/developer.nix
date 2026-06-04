@@ -7,11 +7,11 @@
     ./full.nix
   ];
 
-  programs.adb.enable = true;
 
   environment.systemPackages = with pkgs; [
     gh
     filezilla
+    android-tools
 
     # IDEs
     android-studio
