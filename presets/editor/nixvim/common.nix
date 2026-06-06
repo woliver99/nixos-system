@@ -1,6 +1,6 @@
 # Common files for my nixvim config
 
-# sudo nix-channel --add https://github.com/nix-community/nixvim/archive/refs/heads/nixos-25.11.tar.gz nixvim && sudo nix-channel --update
+# sudo nix-channel --add https://github.com/nix-community/nixvim/archive/refs/heads/nixos-26.05.tar.gz nixvim && sudo nix-channel --update
 
 { pkgs, ... }:
 
