@@ -9,4 +9,4 @@ fi
 
 mkdir -p /etc/nixos/
 cd /etc/nixos/
-sudo nix-shell -p git --run "sudo git init && sudo git submodule add https://github.com/woliver99/nixos-system.git nixos-system && sudo git submodule update --init --recursive"
+nix-shell -p git --run "git init && git submodule add https://github.com/woliver99/nixos-system.git nixos-system && git submodule update --init --recursive"
