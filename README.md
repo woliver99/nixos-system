@@ -6,6 +6,13 @@ sudo git submodule update --remote --merge
 
 # Setup
 
+Automatic Setup:
+```
+curl -sSL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/setup.sh | bash
+```
+
+## Manual
+
 1. Go to configuration directory:
 ```
 cd /etc/nixos/
