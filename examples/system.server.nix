@@ -16,7 +16,6 @@
     ./nixos-system/features/passwordless-sudo.nix
   ];
 
-  # -- Move to configuration.nix --
   networking.hostName = "nixos"; # Device name
   time.timeZone = "America/Toronto"; # Time zone
   i18n.defaultLocale = "en_CA.UTF-8"; # Internationalisation properties
