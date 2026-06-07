@@ -2,6 +2,8 @@
 
 {
   imports = [
+    ./nixos-system/modules/server.nix
+
     # -- Presets --
     ./nixos-system/presets/hardware/proxmox.nix # Import your hardware preset here
     ./nixos-system/presets/bootloader/grub-uefi.nix # Import your bootloader preset here
@@ -26,12 +28,4 @@
     layout = "us";
     variant = "";
   };
-
-  swapDevices = [
-    {
-      device = "/var/lib/swapfile";
-      size = 8 * 1024;
-    }
-  ];
 }
-
