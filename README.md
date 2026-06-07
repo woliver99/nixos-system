@@ -8,7 +8,7 @@ sudo git submodule update --remote --merge
 
 Automatic Setup:
 ```
-sudo curl -sSL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/setup.sh | bash
+curl -sSL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/setup.sh | sudo bash
 ```
 
 ## Manual
