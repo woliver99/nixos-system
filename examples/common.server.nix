@@ -5,7 +5,7 @@
     ./nixos-system/modules/server.nix
 
     # -- Presets --
-    ./nixos-system/presets/hardware/proxmox.nix # Import your hardware preset here
+    #./nixos-system/presets/hardware/proxmox.nix # Import your hardware preset here
     ./nixos-system/presets/bootloader/grub-uefi.nix # Import your bootloader preset here
     ./nixos-system/presets/users/woliver99.nix # Import your user preset here
     ./nixos-system/presets/editor/nixvim/ssh.nix # Import your editor preset here (nano is installed by default)
