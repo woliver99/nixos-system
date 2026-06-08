@@ -61,6 +61,8 @@ if ask_yes_no "Do you want to setup partitions on a drive? (Standard UEFI)"; the
         echo "Formatting..."
         mkfs.fat -F 32 -n boot ${PART_PREFIX}1
         mkfs.ext4 -L nixos ${PART_PREFIX}2
+
+        udevadm settle # Wait for Linux to create the /dev/disk/by-label/ shortcuts
         
         echo "Mounting..."
         mount /dev/disk/by-label/nixos /mnt
