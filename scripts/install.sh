@@ -12,7 +12,7 @@ echo "🚀 Starting NixOS Automated Installer..."
 # --- Helper Functions ---
 ask_yes_no() {
     while true; do
-        read -p "$1 [y/N]: " yn < /dev/tty
+        read -p "$1 [y/N]: " yn
         case $yn in
             [Yy]* ) return 0;; # Yes
             [Nn]* | "" ) return 1;; # No (Default)
@@ -37,7 +37,7 @@ if ask_yes_no "Do you want to setup partitions on a drive? (Standard UEFI)"; the
     echo "Available drives:"
     lsblk -dpno NAME,SIZE,MODEL
     echo ""
-    read -p "Enter the drive to format (e.g., /dev/sda, /dev/mmcblk1): " DISK < /dev/tty
+    read -p "Enter the drive to format (e.g., /dev/sda, /dev/mmcblk1): " DISK
 
     if [ ! -b "$DISK" ]; then
         echo "❌ Drive $DISK not found. Exiting."
@@ -53,16 +53,14 @@ if ask_yes_no "Do you want to setup partitions on a drive? (Standard UEFI)"; the
         umount ${PART_PREFIX}* 2>/dev/null || true
 
         echo "Creating Standard UEFI partitions (GPT, FAT32 Boot + Ext4 Root)..."
-        # Added -s to force script mode and bypass the warning you saw
-        parted -s $DISK -- mklabel gpt
-        parted -s $DISK -- mkpart ESP fat32 1MiB 1024MiB
-        parted -s $DISK -- set 1 esp on
-        parted -s $DISK -- mkpart primary ext4 1024MiB 100%
+        parted $DISK -- mklabel gpt
+        parted $DISK -- mkpart ESP fat32 1MiB 1024MiB
+        parted $DISK -- set 1 esp on
+        parted $DISK -- mkpart primary ext4 1024MiB 100%
         
         echo "Formatting..."
         mkfs.fat -F 32 -n boot ${PART_PREFIX}1
-        # Added -F to force format without prompting
-        mkfs.ext4 -F -L nixos ${PART_PREFIX}2
+        mkfs.ext4 -L nixos ${PART_PREFIX}2
         
         echo "Mounting..."
         mount /dev/disk/by-label/nixos /mnt
