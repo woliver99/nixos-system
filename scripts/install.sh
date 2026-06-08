@@ -98,3 +98,5 @@ echo "2. Once you are done configuring, run:"
 echo "   nixos-install"
 echo "3. Reboot your system!"
 echo "--------------------------------------------------------"
+
+cd /mnt/etc/nixos/
