@@ -79,9 +79,9 @@ if ask_yes_no "Do you want to setup partitions on a drive? (Standard UEFI)"; the
 
         echo "Formatting root partition as $ROOT_FS..."
         if [ "$ROOT_FS" == "f2fs" ]; then
-            mkfs.f2fs -l nixos ${PART_PREFIX}2
+            mkfs.f2fs -f -l nixos ${PART_PREFIX}2
         else
-            mkfs.ext4 -L nixos ${PART_PREFIX}2
+            mkfs.ext4 -f -L nixos ${PART_PREFIX}2
         fi
 
         udevadm settle # Wait for Linux to create the /dev/disk/by-label/ shortcuts
