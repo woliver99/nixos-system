@@ -46,21 +46,43 @@ if ask_yes_no "Do you want to setup partitions on a drive? (Standard UEFI)"; the
 
     PART_PREFIX=$(get_partition_prefix "$DISK")
 
+    # --- Filesystem Selection ---
+    echo ""
+    echo "Select the filesystem for the Root partition:"
+    echo "1) ext4 (Standard, highly stable)"
+    echo "2) f2fs (Optimized for SD Cards, eMMC, and flash lifespan)"
+    while true; do
+        read -p "Enter choice [1 or 2]: " FS_CHOICE
+        case $FS_CHOICE in
+            1) ROOT_FS="ext4"; break;;
+            2) ROOT_FS="f2fs"; break;;
+            *) echo "Please enter 1 or 2.";;
+        esac
+    done
+
+    echo ""
     echo "⚠️  WARNING: This will DESTROY ALL DATA on $DISK."
     if ask_yes_no "Are you absolutely sure?"; then
         
         # Unmount anything on that disk just in case
         umount ${PART_PREFIX}* 2>/dev/null || true
 
-        echo "Creating Standard UEFI partitions (GPT, FAT32 Boot + Ext4 Root)..."
+        echo "Creating Standard UEFI partitions (GPT, FAT32 Boot + $ROOT_FS Root)..."
         parted $DISK -- mklabel gpt
         parted $DISK -- mkpart ESP fat32 1MiB 1024MiB
         parted $DISK -- set 1 esp on
-        parted $DISK -- mkpart primary ext4 1024MiB 100%
+        # Omitting the fs-type hint here so parted doesn't get confused by f2fs
+        parted $DISK -- mkpart primary 1024MiB 100%
         
-        echo "Formatting..."
+        echo "Formatting boot partition..."
         mkfs.fat -F 32 -n boot ${PART_PREFIX}1
-        mkfs.ext4 -L nixos ${PART_PREFIX}2
+
+        echo "Formatting root partition as $ROOT_FS..."
+        if [ "$ROOT_FS" == "f2fs" ]; then
+            mkfs.f2fs -l nixos ${PART_PREFIX}2
+        else
+            mkfs.ext4 -L nixos ${PART_PREFIX}2
+        fi
 
         udevadm settle # Wait for Linux to create the /dev/disk/by-label/ shortcuts
         
@@ -94,6 +116,7 @@ echo ""
 echo "Next steps:"
 echo "1. Configure your system and bootloader by editing:"
 echo "   nano /mnt/etc/nixos/configuration.nix"
+echo "   (Or copy your existing configuration folder here!)"
 echo "2. Once you are done configuring, run:"
 echo "   nixos-install"
 echo "3. Reboot your system!"
