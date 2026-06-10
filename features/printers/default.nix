@@ -11,7 +11,7 @@
   # Printing
   services.printing = {
     enable = true;
-    browsed.enable = false; # Disable auto adding printers
+    browsed.enable = true;
   };
 
   # Auto discovery
@@ -28,5 +28,6 @@
     extraBackends = [
       pkgs.sane-airscan # Universal
     ];
+    disabledDefaultBackends = [ "escl" ]; # Disable default universal driver
   };
 }
