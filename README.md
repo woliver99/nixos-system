@@ -4,6 +4,12 @@
 sudo bash ./nixos-system/scripts/update.sh
 ```
 
+If you are on a version before the update script run this command before running the update script to apply all the migrations:
+
+```
+echo "0" > nixos-system.version
+```
+
 # Setup
 
 ```
