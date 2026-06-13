@@ -5,6 +5,6 @@
 {
   # -- Config --
   imports = [
-    ../../nixos-hardware/dell/latitude/3310 # Import from nixos-hardware repository
+    ../../pkgs/nixos-hardware/dell/latitude/3310 # Import from nixos-hardware repository
   ];
 }

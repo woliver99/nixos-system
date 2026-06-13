@@ -25,7 +25,7 @@ in
 {
   # -- Config --
   imports = [
-    ../../nixos-hardware/msi/gl65 # Import from nixos-hardware repository
+    ../../pkgs/nixos-hardware/msi/gl65 # Import from nixos-hardware repository
   ];
 
   hardware.nvidia.open = false;
@@ -66,4 +66,7 @@ in
   systemd.targets.suspend.enable = false;
   systemd.targets.hibernate.enable = false;
   systemd.targets.hybrid-sleep.enable = false;
+
+  # Overclock
+  services.lact.enable = true;
 }
