@@ -1,4 +1,4 @@
-Designed for nixos 26.05
+NixOS Version 26.05
 
 # Update
 
