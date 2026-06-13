@@ -1,9 +1,9 @@
 import subprocess
 
 def run(console):
-    console.print("[cyan]Running Migration 1: Moving nixos-hardware location...[/cyan]")
+    console.print("[cyan]Running Migration 2: Update printer feature path...[/cyan]")
     
-    cmd = r"find . -type f -not -path '*/.*' -not -path './nixos-system/*' -exec sed -i 's|nixos-system/nixos-hardware/|nixos-system/pkgs/nixos-hardware/|g' {} +"
+    cmd = r"find . -type f -not -path '*/.*' -not -path './nixos-system/*' -exec sed -i 's|\./nixos-system/features/printers\b|\./nixos-system/features/printers.nix|g' {} +"
 
     try:
         subprocess.run(cmd, shell=True, check=True)

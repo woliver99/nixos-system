@@ -1,4 +1,4 @@
-# Adds support for printing to most printers
+# Adds support for most printers/scanners
 
 { pkgs, ... }:
 
