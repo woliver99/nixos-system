@@ -68,6 +68,7 @@ def main():
         if Confirm.ask("Are you absolutely sure?", default=False):
             
             with console.status(f"[bold green]Partitioning and Formatting {disk} for {boot_mode.upper()}...") as status:
+                run_cmd("umount -R /mnt 2>/dev/null || true", shell=True, check=False)
                 run_cmd(f"umount -R {part_prefix}* 2>/dev/null || true", shell=True, check=False)
 
                 if boot_mode == "uefi":
