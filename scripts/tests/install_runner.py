@@ -26,15 +26,54 @@ def run_cmd(cmd, shell=False, input_data=None):
     )
     return res
 
-def check_mounts(boot_mode):
-    """Verifies if the installer actually mounted the partitions properly."""
+def check_mounts(disk, boot_mode, expected_fs):
+    """
+    Strictly verifies:
+    1. The partition table layout (gpt for UEFI, dos for BIOS)
+    2. That the paths are mounted
+    3. That the root filesystem is exactly what we requested (ext4 vs f2fs)
+    """
+    # 1. Verify Partition Table Type via blkid
+    # (returns 'gpt' for UEFI, 'dos' for Legacy BIOS)
+    pt_res = subprocess.run(
+        ["blkid", "-o", "value", "-s", "PTTYPE", disk],
+        text=True, capture_output=True
+    )
+    actual_pt = pt_res.stdout.strip()
+    expected_pt = "gpt" if boot_mode == "uefi" else "dos"
+    
+    if actual_pt != expected_pt:
+        return False, f"Wrong Partition Table: Expected {expected_pt}, got {actual_pt}"
+
+    # 2. Verify Mounts and Filesystem Types
+    nixos_mounted = False
+    boot_mounted = True if boot_mode == "bios" else False
+    
     with open("/proc/mounts", "r") as f:
-        mounts = f.read()
-    
-    nixos_mounted = "/mnt " in mounts
-    boot_mounted = "/mnt/boot " in mounts if boot_mode == "uefi" else True
-    
-    return nixos_mounted and boot_mounted
+        for line in f:
+            parts = line.split()
+            if len(parts) < 3:
+                continue
+            
+            mount_point = parts[1]
+            fs_type = parts[2]
+            
+            # Check root partition mount and format type
+            if mount_point == "/mnt":
+                if fs_type == expected_fs:
+                    nixos_mounted = True
+                else:
+                    return False, f"Wrong Root FS: Expected {expected_fs}, got {fs_type}"
+            
+            # Check UEFI boot partition mount (vfat)
+            if boot_mode == "uefi" and mount_point == "/mnt/boot":
+                if fs_type in ["vfat", "msdos"]:
+                    boot_mounted = True
+
+    if nixos_mounted and boot_mounted:
+        return True, "PASSED"
+    else:
+        return False, "Missing Expected Mount Points"
 
 def clean_disk(disk):
     """Force unmounts everything to prepare for the next test iteration."""
@@ -80,24 +119,21 @@ def main():
         console.print(f"\n[bold blue]🤖 Automating: {boot.upper()} + {fs.upper()}[/bold blue]")
         clean_disk(disk)
 
-        # Construct the string of answers the script's interactive prompts expect:
-        # 1. Setup partitions? -> y
-        # 2. Drive path? -> disk
-        # 3. Boot Mode? -> boot
-        # 4. Filesystem? -> fs
-        # 5. Are you sure? -> y
-        # 6. Generate configuration? -> y
         simulated_inputs = f"y\n{disk}\n{boot}\n{fs}\ny\ny\n"
-
-        # Execute your script with the mocked stdin responses
         proc = run_cmd(["python3", TARGET_SCRIPT], input_data=simulated_inputs)
         
         exec_status = "[green]SUCCESS[/green]" if proc.returncode == 0 else "[red]FAILED[/red]"
         
-        # Verify the hardware layout state after script exits
-        udevadm_settle = subprocess.run(["udevadm", "settle"])
-        mounted_correctly = check_mounts(boot)
-        mount_status = "[green]PASSED[/green]" if mounted_correctly else "[red]FAILED[/red]"
+        # Verify hardware states using the updated rigorous function
+        subprocess.run(["udevadm", "settle"])
+        time.sleep(1) # Give the kernel a breath to populate /proc/mounts
+        
+        is_valid, message = check_mounts(disk, boot, fs)
+        
+        if is_valid:
+            mount_status = "[green]PASSED[/green]"
+        else:
+            mount_status = f"[red]FAILED ({message})[/red]"
 
         results.add_row(boot.upper(), fs.upper(), exec_status, mount_status)
         
