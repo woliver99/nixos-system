@@ -71,10 +71,10 @@ def main():
                 run_cmd(f"umount -R {part_prefix}* 2>/dev/null || true", shell=True, check=False)
 
                 if boot_mode == "uefi":
-                    run_cmd("parted", disk, "--", "mklabel", "gpt")
-                    run_cmd("parted", disk, "--", "mkpart", "ESP", "fat32", "1MiB", "1024MiB")
-                    run_cmd("parted", disk, "--", "set", "1", "esp", "on")
-                    run_cmd("parted", disk, "--", "mkpart", "primary", "1024MiB", "100%")
+                    run_cmd("parted", "-s", disk, "--", "mklabel", "gpt")
+                    run_cmd("parted", "-s", disk, "--", "mkpart", "ESP", "fat32", "1MiB", "1024MiB")
+                    run_cmd("parted", "-s", disk, "--", "set", "1", "esp", "on")
+                    run_cmd("parted", "-s", disk, "--", "mkpart", "primary", "1024MiB", "100%")
                     
                     run_cmd("mkfs.fat", "-F", "32", "-n", "boot", f"{part_prefix}1")
                     run_cmd(f"mkfs.{fs_choice}", "-f" if fs_choice == "f2fs" else "-F", "-L" if fs_choice == "ext4" else "-l", "nixos", f"{part_prefix}2")
@@ -85,8 +85,8 @@ def main():
                     run_cmd("mount", "/dev/disk/by-label/boot", "/mnt/boot")
 
                 elif boot_mode == "bios":
-                    run_cmd("parted", disk, "--", "mklabel", "msdos")
-                    run_cmd("parted", disk, "--", "mkpart", "primary", "ext4", "1MiB", "100%")
+                    run_cmd("parted", "-s", disk, "--", "mklabel", "msdos")
+                    run_cmd("parted", "-s", disk, "--", "mkpart", "primary", "ext4", "1MiB", "100%")
                     
                     run_cmd(f"mkfs.{fs_choice}", "-f" if fs_choice == "f2fs" else "-F", "-L" if fs_choice == "ext4" else "-l", "nixos", f"{part_prefix}1")
 
