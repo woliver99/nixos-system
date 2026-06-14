@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 from rich.console import Console
-from rich.prompt import Confirm
+from rich.prompt import Prompt
 
 console = Console()
 
@@ -95,10 +95,17 @@ def main():
         console.print("[bold magenta]❓ Machine version is ahead of available migrations. Skipping.[/bold magenta]")
 
     # Final Stage: Run the NixOS rebuild
-    console.print("") # Add spacing
-    if Confirm.ask("[bold yellow]❓ Do you want to run nixos-rebuild switch?[/bold yellow]", default=True):
-        console.print("\n[bold green]⚙️ Running nixos-rebuild switch...[/bold green]")
-        ret = os.system("nixos-rebuild switch")
+    console.print("")
+
+    action = Prompt.ask(
+        "[bold yellow]❓ How would you like to apply the rebuild?[/bold yellow]",
+        choices=["switch", "boot", "skip"],
+        default="switch"
+    )
+
+    if action in ["switch", "boot"]:
+        console.print(f"\n[bold green]⚙️ Running nixos-rebuild {action}...[/bold green]")
+        ret = os.system(f"nixos-rebuild {action}")
         
         if ret == 0:
             console.print("\n[bold green]🎉 System update completely successful![/bold green]")
