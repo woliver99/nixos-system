@@ -1,11 +1,9 @@
 # Common files for my nixvim config
 
-# sudo nix-channel --add https://github.com/nix-community/nixvim/archive/refs/heads/nixos-26.05.tar.gz nixvim && sudo nix-channel --update
-
 { pkgs, ... }:
 
 let
-  nixvim = import <nixvim>;
+  nixvim = import ../../../pkgs/nixvim;
 in
 {
   imports = [ nixvim.nixosModules.nixvim ];
