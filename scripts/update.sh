@@ -7,10 +7,10 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 echo "Updating main system submodule from remote..."
-git submodule update --init --remote --merge
+git submodule update --init --remote --merge nixos-system
 
 echo "Syncing nested submodules to pinned commits..."
-git submodule update --init --recursive
+git -C nixos-system submodule update --init --recursive
 
 echo "Launching Update Manager..."
 nix-shell -p "python313.withPackages (ps: with ps; [ rich ])" --run "python3 nixos-system/scripts/update_manager.py"
