@@ -97,11 +97,15 @@ def main():
     # Final Stage: Run the NixOS rebuild
     console.print("")
 
-    action = Prompt.ask(
-        "[bold yellow]❓ How would you like to apply the rebuild?[/bold yellow]",
-        choices=["switch", "boot", "skip"],
-        default="switch"
-    )
+    try:
+        action = Prompt.ask(
+            "[bold yellow]❓ How would you like to apply the rebuild?[/bold yellow]",
+            choices=["switch", "boot", "skip"],
+            default="switch"
+        )
+    except KeyboardInterrupt:
+        console.print() # Adds a clean newline after the ^C terminal character
+        action = "skip"
 
     if action in ["switch", "boot"]:
         console.print(f"\n[bold green]⚙️ Running nixos-rebuild {action}...[/bold green]")
