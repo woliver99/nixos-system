@@ -7,6 +7,7 @@ def run(console):
 
     try:
         subprocess.run(cmd, shell=True, check=True)
+        subprocess.run("rm -rf ./nixos-system/nixos-hardware/", shell=True, check=True)
         console.print("[green]✅ Paths updated successfully.[/green]")
         return True
     except subprocess.CalledProcessError as e:
