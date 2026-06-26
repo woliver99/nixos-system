@@ -7,6 +7,4 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-nix-shell -p git --run "git init && git submodule add https://github.com/woliver99/nixos-system.git nixos-system && git submodule update --init --recursive"
-
-bash ./nixos-system/scripts/update.sh
+nix-shell -p git --run "git init && git submodule add https://github.com/woliver99/nixos-system.git nixos-system && git submodule update --init --recursive && bash ./nixos-system/scripts/update.sh"
