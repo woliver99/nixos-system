@@ -16,7 +16,7 @@
     ./nixos-system/features/firewall.nix # Enables the system firewall (might break some apps if not configured properly)
     ./nixos-system/features/ssh.nix # Installs ssh only accessible via public keys (disables password logins)
     ./nixos-system/features/shell-shortcuts.nix # Usefull shell shortcuts I like to have in my terminal
-    ./nixos-system/features/passwordless-sudo.nix
+    ./nixos-system/features/passwordless-sudo.nix # Disables needing password for sudo, low-key unsafe
   ];
 
   networking.hostName = "nixos"; # Device name

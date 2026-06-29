@@ -7,7 +7,7 @@
 
   programs.tmux = {
     enable = true;
-    shortcut = lib.mkOverride 990 "a";
+    shortcut = lib.mkDefault "b";
     aggressiveResize = true;
     baseIndex = 1;
     newSession = true;

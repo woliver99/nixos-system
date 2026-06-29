@@ -8,7 +8,7 @@
   services.desktopManager.gnome.enable = true;
 
   # Enable GNOME networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager.enable = lib.mkDefault true;
 
   # Exclude GNOME apps
   environment.gnome.excludePackages = [

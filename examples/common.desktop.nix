@@ -24,6 +24,7 @@
     ./nixos-system/features/ssh.nix # Installs ssh only accessible via public keys (disables password logins)
     ./nixos-system/features/shell-shortcuts.nix # Usefull shell shortcuts I like to have in my terminal
     ./nixos-system/features/custom-options.nix # Custom nix configuration options for easier customizations
+    #./nixos-system/features/passwordless-sudo.nix # Disables needing password for sudo, low-key unsafe
     #./nixos-system/features/remote-desktop.nix # Installs Gnome remote desktop which works over rdp (should only be enabled when using Gnome)
     #./nixos-system/features/steam.nix # Installs Steam
     #./nixos-system/features/obs.nix # Installs OBS
@@ -41,5 +42,6 @@
     variant = "";
   };
 
+  #users.users.user.description = "Oliver"; # Set low privilage user display name
   #users.users.woliver99.hidden = true; # Hide admin user from desktop
 }
