@@ -8,8 +8,6 @@
 
     extraGroups = [
       "networkmanager"
-      "video"
-      "render"
     ];
   };
 }
