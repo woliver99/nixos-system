@@ -1,5 +1,3 @@
-# My nixvim config with wl-clipboard
-
 { pkgs, ... }:
 
 {
@@ -8,24 +6,16 @@
   ];
 
   programs.nixvim = {
-    extraPlugins = with pkgs.vimPlugins; [
-      nvim-osc52
-    ];
-
     extraConfigLua = ''
-      local function copy(lines, _)
-        require('osc52').copy(table.concat(lines, '\n'))
-      end
-
       local function paste()
         return {vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("")}
       end
 
       vim.g.clipboard = {
-        name = 'osc52',
+        name = 'native-osc52',
         copy = {
-          ['+'] = copy,
-          ['*'] = copy,
+          ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+          ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
         },
         paste = {
           ['+'] = paste,

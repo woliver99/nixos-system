@@ -85,6 +85,10 @@
     user.databases = [
       {
         settings = {
+          "org/gnome/desktop/interface" = {
+            enable-hot-corners = false;
+          };
+
           "org/gnome/desktop/wm/preferences" = {
             button-layout = ":minimize,maximize,close"; # Add minimize maximize and close to windows
           };
