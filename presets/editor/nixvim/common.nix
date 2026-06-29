@@ -22,7 +22,6 @@ in
     };
 
     extraPackages = with pkgs; [
-      tree-sitter
       nodejs
 
       nixfmt
@@ -120,8 +119,6 @@ in
       # Syntax Highlighting
       treesitter = {
         enable = true;
-        nixGrammars = true;
-        grammarPackages = pkgs.vimPlugins.nvim-treesitter.allGrammars;
 
         highlight = {
           enable = true;

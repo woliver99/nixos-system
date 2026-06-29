@@ -4,7 +4,6 @@
   imports = [
     # -- Presets --
     #./nixos-system/presets/hardware/msi-gl65-leopard-10sfk.nix # Import your hardware preset here
-    ./nixos-system/presets/bootloader/grub-uefi.nix # Import your bootloader preset here
     ./nixos-system/presets/users/user.nix # Import your user here
     #./nixos-system/presets/users/woliver99.nix # Admin user
     ./nixos-system/presets/editor/nixvim/wayland.nix # Import your editor preset here (comment out if all you need is nano since thats installed by default)
