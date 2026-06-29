@@ -14,17 +14,25 @@
   nix.gc = {
     automatic = lib.mkDefault true;
     options = lib.mkDefault "--delete-older-than 14d";
-    dates = lib.mkDefault "Sun *-*-* 02:00:00";
+    dates = lib.mkDefault "Sat *-*-* 04:30:00";
   };
 
-  # This "hardlinks" identical files in the nix store to save massive amounts of space.
-  nix.settings.auto-optimise-store = lib.mkDefault true;
-
-  systemd.timers.nix-gc.timerConfig = {
-    RandomizedDelaySec = lib.mkForce "2h";
-    AccuracySec = lib.mkForce "1us";
+  nix.optimise = {
+    automatic = lib.mkDefault true;
+    dates = [ "Sat *-*-1..7 04:45:00" ]; # First Saturday of the month
   };
+
+  systemd.services.nixos-upgrade.serviceConfig = {
+    Nice = 19;
+    IOSchedulingClass = "idle";
+  };
+
   systemd.services.nix-gc.serviceConfig = {
+    Nice = 19;
+    IOSchedulingClass = "idle";
+  };
+
+  systemd.services.nix-optimise.serviceConfig = {
     Nice = 19;
     IOSchedulingClass = "idle";
   };
