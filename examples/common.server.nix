@@ -2,7 +2,9 @@
 
 {
   imports = [
-    ./nixos-system/modules/server.nix
+    # -- Modules --
+    ./nixos-system/modules/server.nix # Changes the tmux keybind to b
+    ./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
 
     # -- Presets --
     #./nixos-system/presets/hardware/proxmox.nix # Import your hardware preset here

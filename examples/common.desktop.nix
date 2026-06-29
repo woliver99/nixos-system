@@ -2,6 +2,9 @@
 
 {
   imports = [
+    # -- Modules --
+    ./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
+
     # -- Presets --
     #./nixos-system/presets/hardware/msi-gl65-leopard-10sfk.nix # Import your hardware preset here
     ./nixos-system/presets/users/user.nix # Import your user here
