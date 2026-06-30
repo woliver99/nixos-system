@@ -9,7 +9,7 @@
     #./nixos-system/presets/hardware/msi-gl65-leopard-10sfk.nix # Import your hardware preset here
     ./nixos-system/presets/users/user.nix # Import your user here
     #./nixos-system/presets/users/woliver99.nix # Admin user
-    ./nixos-system/presets/editor/nixvim/wayland.nix # Import your editor preset here (comment out if all you need is nano since thats installed by default)
+    ./nixos-system/presets/editor/nixvim # Import your editor preset here (comment out if all you need is nano since thats installed by default)
     ./nixos-system/presets/display-manager/gnome.nix # Import your desktop environment here
     ./nixos-system/presets/apps/full.nix # Import your apps preset here (options: essentials, full, developer)
 
