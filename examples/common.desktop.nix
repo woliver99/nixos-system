@@ -2,12 +2,6 @@
 
 {
   imports = [
-<<<<<<< HEAD
-    # -- Modules --
-    #./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
-
-=======
->>>>>>> 9d5a961 (Alot of changes)
     # -- Presets --
     #./nixos-system/presets/hardware/msi-gl65-leopard-10sfk.nix # Import your hardware preset here
     ./nixos-system/presets/users/user.nix # Import your user here
@@ -48,6 +42,4 @@
   };
 
   #users.users.woliver99.hidden = true; # Hide admin user from desktop
-  #programs.tmux.shortcut = "a"; # Change tmux keybind, leave commented out if you dont know what it is
-  #nix.settings.auto-optimise-store = true; # Optimize nix store during builds, takes longer but needed on laptops
 }
