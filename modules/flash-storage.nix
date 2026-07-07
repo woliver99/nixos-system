@@ -13,11 +13,11 @@
     "vm.swappiness" = 180;
 
     # Start background writes as soon as there is just 4MB of dirty data in RAM
-    "vm.dirty_background_bytes" = 4194304; # 4 MB
+    #"vm.dirty_background_bytes" = 4194304; # 4 MB
 
     # Block processes from creating more dirty data if it hits 16MB
     # This guarantees a flush will never take more than a fraction of a second
-    "vm.dirty_bytes" = 16777216; # 16 MB
+    #"vm.dirty_bytes" = 16777216; # 16 MB
   };
 
   # Mounts /tmp in RAM. Protects SD card during Nix builds.

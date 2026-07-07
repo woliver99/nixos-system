@@ -3,10 +3,7 @@
 { ... }:
 
 {
-  imports = [
-    ../../modules/virtual-machine.nix
-    ../../modules/server.nix
-  ];
+  services.qemuGuest.enable = true;
 
   # Automatically grow the filesystem on boot.
   boot.growPartition = true;
