@@ -17,8 +17,6 @@
     #./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
 
     # -- Features --
-    ./nixos-system/features/grub-firmware-entry.nix # Adds a "Reboot to UEFI" entry
-    #./nixos-system/features/grub-dualboot.nix # Adds other operating systems (like Windows) to grub
     ./nixos-system/features/firewall.nix # Enables the system firewall (might break some apps if not configured properly)
     ./nixos-system/features/auto-update.nix # System auto updates every week and waits for a reboot to apply changes
     ./nixos-system/features/flatpak.nix # Installs Flatpak for easy sandbox app installs for users
