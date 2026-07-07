@@ -22,7 +22,6 @@
     #../features/printers.nix # Adds support for most printers
     #../features/vpn.nix # Adds support for most vpns
     ../features/ssh.nix # Installs ssh only accessible via public keys (disables password logins)
-    ../features/passwordless-sudo.nix # Disables needing password for sudo, low-key unsafe
     #../features/remote-desktop.nix # Installs Gnome remote desktop which works over rdp (should only be enabled when using Gnome)
     #../features/steam.nix # Installs Steam
     #../features/obs.nix # Installs OBS

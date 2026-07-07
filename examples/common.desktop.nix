@@ -23,7 +23,6 @@
     ./nixos-system/features/printers.nix # Adds support for most printers
     ./nixos-system/features/vpn.nix # Adds support for most vpns
     ./nixos-system/features/ssh.nix # Installs ssh only accessible via public keys (disables password logins)
-    #./nixos-system/features/passwordless-sudo.nix # Disables needing password for sudo, low-key unsafe
     #./nixos-system/features/remote-desktop.nix # Installs Gnome remote desktop which works over rdp (should only be enabled when using Gnome)
     #./nixos-system/features/steam.nix # Installs Steam
     #./nixos-system/features/obs.nix # Installs OBS
