@@ -2,6 +2,9 @@
 
 {
   imports = [
+    # -- Common --
+    ./default.nix # Common config for every system
+
     # -- Presets --
     ./nixos-system/presets/users/user.nix # Import your user here
     ./nixos-system/presets/users/woliver99.nix # Admin user
@@ -10,12 +13,9 @@
     ./nixos-system/presets/apps/full.nix # Import your apps preset here (options: essentials, full, developer)
 
     # -- Modules --
-    ./nixos-system/modules/common.nix # Common config for every system
     ./nixos-system/modules/zattoo # Zattoo tv app
 
     # -- Features --
-    ./nixos-system/features/grub-firmware-entry.nix # Adds a "Reboot to UEFI" entry
-    #./nixos-system/features/grub-dualboot.nix # Adds other operating systems (like Windows) to grub
     ./nixos-system/features/firewall.nix # Enables the system firewall (might break some apps if not configured properly)
     ./nixos-system/features/auto-update.nix # System auto updates every week and waits for a reboot to apply changes
     ./nixos-system/features/flatpak.nix # Installs Flatpak for easy sandbox app installs for users
@@ -28,16 +28,6 @@
     #./nixos-system/features/obs.nix # Installs OBS
     #./nixos-system/features/drawing-tablet.nix # Adds support for most drawing tablets
   ];
-
-  time.timeZone = "America/Toronto"; # Time zone
-  i18n.defaultLocale = "en_CA.UTF-8"; # Internationalisation properties
-  nixpkgs.config.allowUnfree = true; # Allow proprietary software to be installed (recommended to be enable)
-
-  # Keymap
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
 
   users.users.woliver99.hidden = true; # Hide admin user from desktop
 }

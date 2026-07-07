@@ -2,6 +2,9 @@
 
 {
   imports = [
+    # -- Common --
+    ./nixos-system/common # Common config for every system
+
     # -- Presets --
     #./nixos-system/presets/hardware/msi-gl65-leopard-10sfk.nix # Import your hardware preset here
     ./nixos-system/presets/users/user.nix # Import your user here
@@ -11,7 +14,6 @@
     ./nixos-system/presets/apps/full.nix # Import your apps preset here (options: essentials, full, developer)
 
     # -- Modules --
-    ./nixos-system/modules/common.nix # Common config for every system
     #./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
 
     # -- Features --
@@ -30,16 +32,6 @@
     #./nixos-system/features/drawing-tablet.nix # Adds support for most drawing tablets
     #./nixos-system/features/bitwarden-ssh-agent.nix # Allows the bitwarden flatpak to act as a ssh agent for the system
   ];
-
-  time.timeZone = "America/Toronto"; # Time zone
-  i18n.defaultLocale = "en_CA.UTF-8"; # Internationalisation properties
-  nixpkgs.config.allowUnfree = true; # Allow proprietary software to be installed (recommended to be enable)
-
-  # Keymap
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
 
   #users.users.woliver99.hidden = true; # Hide admin user from desktop
 }
