@@ -12,6 +12,8 @@ console = Console()
 LOCAL_VERSION_FILE = Path("./nixos-system.version")
 MIGRATIONS_DIR = Path("./nixos-system/scripts/migrations")
 
+DRY_RUN = os.environ.get("MIGRATION_DRY_RUN", "0").lower() in ("1", "true", "yes")
+
 def get_available_migrations():
     """Scans the migrations folder and returns a dict mapping integers to file paths.
     Looks for files matching patterns like v1.py, v2.py, v12.py"""
@@ -27,8 +29,18 @@ def get_available_migrations():
             
     return migrations
 
+def set_system_version(v: int):
+    """Writes the system version to disk, or simulates it if dry run is active."""
+    if DRY_RUN:
+        console.print(f"[yellow]⚡ [Dry-Run] Would update local version file to: {v}[/yellow]")
+    else:
+        LOCAL_VERSION_FILE.write_text(str(v))
+
 def main():
     console.print("[bold blue]System Update Manager[/bold blue]\n")
+
+    if DRY_RUN:
+        console.print("[bold yellow]⚠️ DRY RUN MODE ACTIVE - No changes will be written to disk.[/bold yellow]\n")
     
     available_migrations = get_available_migrations()
     
@@ -41,7 +53,7 @@ def main():
         console.print(f"Setting local system version to the latest: [bold]{repo_version}[/bold]")
         
         # Initialize the file with the highest migration number
-        LOCAL_VERSION_FILE.write_text(str(repo_version))
+        set_system_version(repo_version)
         
         console.print("[green]✅ System initialized to latest baseline. Exiting migration phase.[/green]")
         sys.exit(0)
@@ -73,7 +85,7 @@ def main():
                         success = namespace["run"](console)
                         
                         if success:
-                            LOCAL_VERSION_FILE.write_text(str(v))
+                            set_system_version(v)
                             console.print(f"[bold green]✅ Successfully migrated to version {v}.[/bold green]")
                         else:
                             console.print(f"\n[bold red]🛑 Update halted at version {v}. Manual action required.[/bold red]")
@@ -86,7 +98,7 @@ def main():
                     console.print(f"[bold red]❌ Migration script crashed with error:[/bold red] {e}")
                     sys.exit(1)
             else:
-                LOCAL_VERSION_FILE.write_text(str(v))
+                set_system_version(v)
 
     elif local_version == repo_version:
         console.print("[green]✨ No new migrations to run. Processing normal configuration updates.[/green]")
@@ -96,6 +108,10 @@ def main():
 
     # Final Stage: Run the NixOS rebuild
     console.print("")
+
+    if DRY_RUN:
+        console.print("\n[bold green]🎉 System update dry-run completed successfully![/bold green]")
+        sys.exit(0);
 
     try:
         action = Prompt.ask(

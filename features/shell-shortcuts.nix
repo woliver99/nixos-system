@@ -6,6 +6,7 @@
   programs.bash.shellAliases = {
     editconfig = "cd /etc/nixos/";
     explorer = "(xdg-open . > /dev/null 2>&1 &)";
-    updatesystem = "editconfig &&  sudo bash ./nixos-system/scripts/update.sh";
+    sys-update = "editconfig &&  sudo bash ./nixos-system/scripts/update.sh";
+    sys-dryupdate = "editconfig && sudo bash ./nixos-system/scripts/update.sh --dry-run";
   };
 }
