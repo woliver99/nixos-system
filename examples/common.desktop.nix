@@ -5,18 +5,21 @@
     # -- Common --
     ./nixos-system/common # Common config for every system
 
-    # -- Presets --
-    #./nixos-system/presets/hardware/msi-gl65-leopard-10sfk.nix # Import your hardware preset here
+    # -- Modules --
+    ./nixos-system/modules/editor/nixvim # Neovim set up with a custom config
+    #./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
+    #./nixos-system/modules/zattoo # Zattoo tv app
+
+    # Users
     ./nixos-system/presets/users/user.nix # Import your user here
     #./nixos-system/presets/users/woliver99.nix # Admin user
-    ./nixos-system/presets/editor/nixvim # Import your editor preset here (comment out if all you need is nano since thats installed by default)
-    ./nixos-system/presets/display-manager/gnome.nix # Import your desktop environment here
-    ./nixos-system/presets/apps/full.nix # Import your apps preset here (options: essentials, full, developer)
 
-    # -- Modules --
-    #./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
+    # Profiles
+    ./nixos-system/modules/profiles/hardware/msi-gl65-leopard-10sfk.nix
+    ./nixos-system/modules/profiles/display-manager/gnome.nix # Select your desktop environment here
+    ./nixos-system/modules/profiles/apps/full.nix # Select your apps preset here (options: essentials, full, developer)
 
-    # -- Features --
+    # Features
     ./nixos-system/features/firewall.nix # Enables the system firewall (might break some apps if not configured properly)
     ./nixos-system/features/auto-update.nix # System auto updates every week and waits for a reboot to apply changes
     ./nixos-system/features/flatpak.nix # Installs Flatpak for easy sandbox app installs for users
