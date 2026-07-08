@@ -25,7 +25,7 @@ in
 {
   # -- Config --
   imports = [
-    ../../pkgs/nixos-hardware/msi/gl65 # Import from nixos-hardware repository
+    ../../../pkgs/nixos-hardware/msi/gl65 # Import from nixos-hardware repository
   ];
 
   hardware.nvidia.open = false;

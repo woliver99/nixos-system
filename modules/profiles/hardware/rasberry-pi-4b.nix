@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ../../modules/server.nix
+    ../../../modules/server.nix
   ];
 
   zramSwap.enable = true;

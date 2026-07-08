@@ -4,8 +4,7 @@
 
 {
   imports = [
-    ../features/shell-shortcuts.nix # Usefull shell shortcuts I like to have in my terminal
-    ../features/custom-options.nix # Custom nix configuration options for easier customizations
+    ../modules/custom-options.nix # Custom nix configuration options for easier customizations
   ];
 
   time.timeZone = lib.mkDefault "America/Toronto"; # Time zone
@@ -16,6 +15,13 @@
   services.xserver.xkb = {
     layout = lib.mkDefault "us";
     variant = lib.mkDefault "";
+  };
+
+  programs.bash.shellAliases = {
+    editconfig = "cd /etc/nixos/";
+    explorer = "(xdg-open . > /dev/null 2>&1 &)";
+    sys-update = "editconfig &&  sudo bash ./nixos-system/scripts/update.sh";
+    sys-dryupdate = "editconfig && sudo bash ./nixos-system/scripts/update.sh --dry-run";
   };
 
   # Official community CUDA binary cache

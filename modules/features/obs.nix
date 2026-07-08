@@ -3,7 +3,7 @@
 { pkgs, ... }:
 
 let
-  obs-source-copy = pkgs.qt6Packages.callPackage ../modules/obs-source-copy.nix { };
+  obs-source-copy = pkgs.qt6Packages.callPackage ../obs-source-copy.nix { };
 in
 {
   programs.obs-studio = {
