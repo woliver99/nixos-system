@@ -17,11 +17,10 @@ sudo git submodule update --init --remote --merge nixos-system
 # Setup
 
 ```
-sudo nix-channel --add https://channels.nixos.org/nixos-26.05 nixos
+cd /etc/nixos/
 ```
-
 ```
-cd /etc/nixos/ && curl -sSL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/setup.sh | sudo bash
+curl -sSL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/setup.sh | sudo bash
 ```
 
 # NixOS Minimal Install Script
