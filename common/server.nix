@@ -3,7 +3,7 @@
 {
   imports = [
     # -- Common --
-    ./nixos-system/common # Common config for every system
+    ./default.nix # Common config for every system
 
     # -- Modules --
     ./nixos-system/modules/profiles/apps/essentials.nix # Select your apps preset here (options: essentials, full, developer)
