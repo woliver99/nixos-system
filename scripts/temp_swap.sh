@@ -25,6 +25,10 @@ if swapon --show | grep -q '/dev/zram0'; then
   swapoff /dev/zram0
 fi
 
+echo "⏳ Waiting for system storage layers to settle..."
+udevadm settle || true
+sleep 1
+
 echo "🧹 Resetting zram0 device disksize..."
 # The device must be reset to 1 before its maximum disksize can be changed
 echo 1 > /sys/block/zram0/reset
