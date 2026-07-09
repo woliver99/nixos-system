@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Meant for when inside nixos minimal installation
-# Can be pasted in proxmox with: sleep 2 && echo "type curl -sL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/pull_keys.sh -o /tmp/pull_keys.sh && sudo bash /tmp/pull_keys.sh && rm /tmp/pull_keys.sh" | dotool
+# Can be pasted in proxmox with: nix-shell -p dotool --run 'sleep 2 && echo "type curl -sL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/pull_keys.sh -o /tmp/pull_keys.sh && sudo bash /tmp/pull_keys.sh && rm /tmp/pull_keys.sh" | dotool'
 set -e
 
 if [ "$EUID" -ne 0 ]; then
