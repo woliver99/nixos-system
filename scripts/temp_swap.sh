@@ -8,40 +8,37 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-echo "🌀 Calculating 150% of total physical RAM..."
-# Extract MemTotal from /proc/meminfo (given in kB) and convert to bytes
-MEM_TOTAL_KB=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
-ZRAM_SIZE_BYTES=$(( MEM_TOTAL_KB * 1024 * 3 / 2 ))
-ZRAM_SIZE_MB=$(( ZRAM_SIZE_BYTES / 1024 / 1024 ))
+# 1. Ask the user where to put the swap file
+echo "📂 Where should the swap file be created?"
+echo "👉 (If you are installing NixOS right now, use /mnt/swapfile)"
+read -p "Path [/mnt/swapfile]: " SWAP_PATH
+SWAP_PATH=${SWAP_PATH:-/mnt/swapfile}
 
-echo "📦 Ensuring zram kernel module is loaded..."
-if [ ! -b /dev/zram0 ]; then
-  modprobe zram num_devices=1
+# Validate that the parent directory actually exists
+SWAP_DIR=$(dirname "$SWAP_PATH")
+if [ ! -d "$SWAP_DIR" ]; then
+  echo "❌ Error: The directory '$SWAP_DIR' does not exist."
+  echo "   Make sure your target installation disk is mounted to /mnt first!"
+  exit 1
 fi
 
-# If the installer environment already activated zram0, turn it off to allow resizing
-if swapon --show | grep -q '/dev/zram0'; then
-  echo "🔄 Deactivating existing zram0 swap..."
-  swapoff /dev/zram0
-fi
+# 2. Ask the user for the size of the swap file
+echo -e "\n💾 How large should the swap file be (in MB)?"
+echo "👉 (4096 MB = 4GB, highly recommended to clear NixOS install builds)"
+read -p "Size [4096]: " SWAP_SIZE
+SWAP_SIZE=${SWAP_SIZE:-4096}
 
-echo "⏳ Waiting for system storage layers to settle..."
-udevadm settle || true
-sleep 1
+echo -e "\n🚀 Allocating ${SWAP_SIZE}MB swap file at ${SWAP_PATH}..."
+dd if=/dev/zero of="$SWAP_PATH" bs=1M count="$SWAP_SIZE" status=progress
 
-echo "🧹 Resetting zram0 device disksize..."
-# The device must be reset to 1 before its maximum disksize can be changed
-echo 1 > /sys/block/zram0/reset
+echo "🔒 Setting secure permissions (chmod 600)..."
+chmod 600 "$SWAP_PATH"
 
-echo "⚙️ Setting zram0 virtual size to 150% of RAM (${ZRAM_SIZE_MB} MB)..."
-echo "$ZRAM_SIZE_BYTES" > /sys/block/zram0/disksize
+echo "🛠️ Formatting file as swap..."
+mkswap "$SWAP_PATH"
 
-echo "🛠️ Formatting zram0 as swap..."
-mkswap /dev/zram0
+echo "🏁 Activating swap..."
+swapon "$SWAP_PATH"
 
-echo "🚀 Activating zram0 swap with maximum priority..."
-# Priority 32767 ensures the system hits this compressed RAM before any other swap
-swapon -p 32767 /dev/zram0
-
-echo -e "\n✅ Success! Modern compressed memory airbag is active:"
+echo -e "\n✅ Success! Current active swap configuration:"
 swapon --show
