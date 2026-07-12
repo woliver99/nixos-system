@@ -16,12 +16,4 @@
     ../modules/features/ssh.nix # Installs ssh only accessible via public keys (disables password logins)
     ../modules/features/podman.nix
   ];
-
-  # Prevent OOM
-  swapDevices = [
-    {
-      device = "/var/lib/swapfile";
-      size = 2*1024; # 2GB
-    }
-  ];
 }
