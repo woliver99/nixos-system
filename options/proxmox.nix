@@ -1,14 +1,13 @@
 { config, lib, ... }:
 
 {
-  # Should probably switch to profiles in the future
-  options.mySystem.proxmox.enable = lib.mkOption {
+  options.profiles.proxmox.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;
     description = "Enable Proxmox VM integrations (QEMU guest agent and disk auto-resize).";
   };
 
-  config = lib.mkIf config.mySystem.proxmox.enable {
+  config = lib.mkIf config.profiles.proxmox.enable {
     services.qemuGuest.enable = true;
 
     boot.growPartition = true;

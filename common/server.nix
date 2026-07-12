@@ -17,5 +17,5 @@
     ../modules/features/podman.nix
   ];
 
-  mySystem.proxmox.enable = lib.mkDefault true;
+  profiles.proxmox.enable = lib.mkDefault true;
 }
