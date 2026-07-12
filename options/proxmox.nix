@@ -1,6 +1,7 @@
 { config, lib, ... }:
 
 {
+  # Should probably switch to profiles in the future
   options.mySystem.proxmox.enable = lib.mkOption {
     type = lib.types.bool;
     default = false;

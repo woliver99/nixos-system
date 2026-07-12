@@ -24,10 +24,5 @@
     sys-dryupdate = "editconfig && sudo bash ./nixos-system/scripts/update.sh --dry-run";
   };
 
-  # Official community CUDA binary cache
-  nix.settings = {
-    substituters = [ "https://cache.nixos-cuda.org" ];
-    trusted-public-keys = [ "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M=" ];
-  };
-
+  maplenetwork.localCache.enable = lib.mkDefault true;
 }
