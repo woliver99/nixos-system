@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   imports = [
@@ -16,4 +16,6 @@
     ../modules/features/ssh.nix # Installs ssh only accessible via public keys (disables password logins)
     ../modules/features/podman.nix
   ];
+
+  mySystem.proxmox.enable = lib.mkDefault true;
 }

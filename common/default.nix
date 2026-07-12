@@ -4,7 +4,7 @@
 
 {
   imports = [
-    ../modules/custom-options.nix # Custom nix configuration options for easier customizations
+    ../options # Custom nix configuration options for easier customizations
   ];
 
   time.timeZone = lib.mkDefault "America/Toronto"; # Time zone
