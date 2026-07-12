@@ -24,8 +24,8 @@
       signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoW8s3QavyRRSUlMAUiEmgz/E0/FbzJaajxZ+lxhPnS";
     };
 
-    #url."git@github.com:woliver99/" = {
-    #  insteadOf = "https://github.com/woliver99/";
-    #};
+    url."git@github.com:woliver99/" = {
+      insteadOf = "https://github.com/woliver99/";
+    };
   };
 }
