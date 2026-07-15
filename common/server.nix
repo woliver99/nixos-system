@@ -22,4 +22,5 @@
   ];
 
   profiles.proxmox.enable = lib.mkDefault true;
+  nix.settings.auto-optimise-store = true;
 }
