@@ -9,8 +9,6 @@
 
   config = lib.mkIf config.profiles.proxmox.enable {
     services.qemuGuest.enable = true;
-
-    boot.growPartition = true;
-    fileSystems."/".autoResize = true;
+    services.fstrim.interval = "daily";
   };
 }
