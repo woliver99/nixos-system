@@ -32,7 +32,7 @@ in
 
     security.sudo.extraRules = [
       {
-        users = [ "colmena" ];
+        users = [ "colmena-deploy" ];
         commands = [
           {
             command = "ALL";
