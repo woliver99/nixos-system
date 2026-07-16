@@ -6,5 +6,6 @@
     ./proxmox.nix
     ./cache.nix
     ./remote-build.nix
+    ./colmena-deploy.nix
   ];
 }
