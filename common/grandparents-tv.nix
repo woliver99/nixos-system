@@ -3,7 +3,7 @@
 {
   imports = [
     # -- Common --
-    ./default.nix # Common config for every system
+    ./desktop.nix # Common config for every system
 
     # -- Modules --
     ../modules/editor/nixvim # Neovim set up with a custom config

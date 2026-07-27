@@ -1,6 +1,6 @@
 # Common config for every system
 
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 {
   imports = [
@@ -24,5 +24,7 @@
     sys-dryupdate = "editconfig && sudo bash ./nixos-system/scripts/update.sh --dry-run";
   };
 
+  nix.settings.auto-optimise-store = true; # No reason not to use this
+  features.cleanup.enable = true;
   maplenetwork.localCache.enable = lib.mkDefault true;
 }

@@ -7,5 +7,6 @@
     ./cache.nix
     ./remote-build.nix
     ./colmena-deploy.nix
+    ./maintenance.nix
   ];
 }

@@ -23,6 +23,4 @@
 
   profiles.proxmox.enable = lib.mkDefault true;
   maplenetwork.colmenaDeploy.enable = lib.mkDefault true;
-
-  nix.settings.auto-optimise-store = true;
 }
