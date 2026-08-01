@@ -41,5 +41,9 @@ in
         ];
       }
     ];
+
+    nix.settings.trusted-public-keys = [
+      "nix.lan.maplenetwork.ca:b7H0vKiHzYOBDyeLYuX07Tg/TjWdLIP/n0v2+HQY8gs="
+    ];
   };
 }
