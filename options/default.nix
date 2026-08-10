@@ -8,5 +8,6 @@
     ./remote-build.nix
     ./colmena-deploy.nix
     ./maintenance.nix
+    ./podman.nix
   ];
 }

@@ -15,7 +15,7 @@
 
     # IDEs
     android-studio
-    jetbrains.idea-oss
+    jetbrains.idea
     arduino-ide
     vscode
 

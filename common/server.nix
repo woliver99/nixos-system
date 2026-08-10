@@ -18,9 +18,13 @@
     ../modules/features/firewall.nix  
     #../modules/features/auto-update.nix # Auto updates weekly and waits for a reboot to apply changes
     ../modules/features/ssh.nix
-    ../modules/features/podman.nix
   ];
 
   profiles.proxmox.enable = lib.mkDefault true;
   maplenetwork.colmenaDeploy.enable = lib.mkDefault true;
+
+  features.podman = {
+    enable = true;
+    socket = true;
+  };
 }
