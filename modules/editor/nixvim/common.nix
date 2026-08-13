@@ -6,7 +6,11 @@ let
   nixvim = import ../../../pkgs/nixvim;
 in
 {
-  imports = [ nixvim.nixosModules.nixvim ];
+  imports = [
+    nixvim.nixosModules.nixvim
+    ./lsp.nix
+    ./formatters.nix
+  ];
 
   programs.nixvim = {
     enable = true;
@@ -23,8 +27,8 @@ in
 
     extraPackages = with pkgs; [
       nodejs
-
-      nixfmt
+      gcc
+      ripgrep
     ];
 
     keymaps = [
@@ -159,51 +163,10 @@ in
           ];
         };
       };
-
-      lsp = {
-        enable = true;
-        servers = {
-          nixd.enable = true;
-          rust_analyzer = {
-            enable = true;
-            package = null;
-            installCargo = false;
-            installRustc = false;
-          };
-          html.enable = true;
-          cssls.enable = true;
-          ts_ls.enable = true;
-        };
-      };
-
-      conform-nvim = {
-        enable = true;
-        settings = {
-          formatters_by_ft = {
-            nix = [ "nixfmt" ];
-            #rust = [ "rustfmt" ];
-            html = [ "prettier" ];
-            css = [ "prettier" ];
-            javascript = [ "prettier" ];
-          };
-        };
-
-      };
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    gcc
-    ripgrep
-
-    # Language Servers
-    lua-language-server
-    nixd
-
-    # Formatters
-    nixfmt
-    prettier
-
+  environment.systemPackages = [
     # vi and vim alias
     (pkgs.writeShellScriptBin "vi" "exec nvim \"$@\"")
     (pkgs.writeShellScriptBin "vim" "exec nvim \"$@\"")
