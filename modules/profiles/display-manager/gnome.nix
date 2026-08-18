@@ -69,41 +69,44 @@
     ];
   };
 
-  programs.dconf.profiles = {
-    # Settings for the Login Screen (GDM)
-    gdm.databases = [
-      {
-        settings = {
-          "org/gnome/desktop/peripherals/mouse" = {
-            accel-profile = "flat";
+  programs.dconf = {
+    enable = true;
+    profiles = {
+      # Settings for the Login Screen (GDM)
+      gdm.databases = [
+        {
+          settings = {
+            "org/gnome/desktop/peripherals/mouse" = {
+              accel-profile = "flat";
+            };
           };
-        };
-      }
-    ];
+        }
+      ];
 
-    # Settings for User Sessions (System-wide defaults for all users)
-    user.databases = [
-      {
-        settings = {
-          "org/gnome/desktop/interface" = {
-            enable-hot-corners = false;
-          };
+      # Settings for User Sessions (System-wide defaults for all users)
+      user.databases = [
+        {
+          settings = {
+            "org/gnome/desktop/interface" = {
+              enable-hot-corners = false;
+            };
 
-          "org/gnome/desktop/wm/preferences" = {
-            button-layout = ":minimize,maximize,close"; # Add minimize maximize and close to windows
-          };
+            "org/gnome/desktop/wm/preferences" = {
+              button-layout = ":minimize,maximize,close"; # Add minimize maximize and close to windows
+            };
 
-          "org/gnome/settings-daemon/plugins/media-keys" = {
-            home = [ "<Super>e" ]; # Super+E for Nautilus
-          };
+            "org/gnome/settings-daemon/plugins/media-keys" = {
+              home = [ "<Super>e" ]; # Super+E for Nautilus
+            };
 
-          "org/gnome/shell/keybindings" = {
-            show-screenshot-ui = [ "<Shift><Super>s" ]; # Shift+Super+S for screenshot
-            toggle-message-tray = lib.gvariant.mkEmptyArray lib.gvariant.type.string; # Unbind Super+V so it can be used in copyous
+            "org/gnome/shell/keybindings" = {
+              show-screenshot-ui = [ "<Shift><Super>s" ]; # Shift+Super+S for screenshot
+              toggle-message-tray = lib.gvariant.mkEmptyArray lib.gvariant.type.string; # Unbind Super+V so it can be used in copyous
+            };
           };
-        };
-      }
-    ];
+        }
+      ];
+    };
   };
 
   fonts = {

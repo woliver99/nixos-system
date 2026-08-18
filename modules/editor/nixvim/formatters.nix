@@ -20,6 +20,9 @@
           json = [ "prettier" ];
           python = [ "black" ];
           lua = [ "stylua" ];
+          
+          # Installed per project
+          astro = [ "prettier" ];
         };
       };
     };
