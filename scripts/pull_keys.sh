@@ -11,3 +11,5 @@ fi
 mkdir -p /root/.ssh && chmod 700 /root/.ssh
 curl https://github.com/woliver99.keys >> /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
+
+echo "Added woliver99's Github keys to root user"
