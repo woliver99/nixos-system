@@ -17,7 +17,8 @@ mkdir -p "$TEMP_DIR"
 curl -sL "$REPO_TARBALL_URL" | tar -xz -C "$TEMP_DIR" --strip-components=1
 
 echo "Launching Install Manager..."
-nix-shell -p "python313.withPackages (ps: with ps; [ rich ])" --run "python3 -m scripts.installer.main" --chdir "$TEMP_DIR"
+cd "$TEMP_DIR"
+nix-shell -p "python313.withPackages (ps: with ps; [ rich ])" --run "python3 -m scripts.installer.main"
 
 # Clean up
 rm -rf "$TEMP_DIR"

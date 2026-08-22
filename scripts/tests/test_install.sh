@@ -20,6 +20,7 @@ echo "📦 Fetching repository files..."
 curl -sL "$REPO_TARBALL_URL" | tar -xz -C "$TEMP_DIR" --strip-components=1
 
 echo "🔧 Launching test runner inside Nix environment..."
+cd "$TEMP_DIR"
 nix-shell -p \
   "python313.withPackages (ps: with ps; [ rich ])" \
   parted \
@@ -29,7 +30,7 @@ nix-shell -p \
   f2fs-tools \
   dosfstools \
   util-linux \
-  --run "python3 scripts/tests/test_installer.py" --chdir "$TEMP_DIR"
+  --run "python3 scripts/tests/test_installer.py"
 
 # Clean up repository files after test completion
 rm -rf "$TEMP_DIR"
