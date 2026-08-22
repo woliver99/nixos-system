@@ -119,7 +119,7 @@ def setup_btrfs(cfg: InstallConfig) -> None:
     run_cmd("mount", "-o", "subvol=@nix,compress=zstd,noatime", target_dev, "/mnt/nix")
 
     os.makedirs("/mnt/boot", exist_ok=True)
-    run_cmd("mount", "/dev/disk/by-label/boot", "/mnt/boot")
+    run_cmd("mount", "-o", "umask=077", "/dev/disk/by-label/boot", "/mnt/boot")
 
 
 def setup_standard_fs(cfg: InstallConfig) -> None:
@@ -135,7 +135,7 @@ def setup_standard_fs(cfg: InstallConfig) -> None:
     run_cmd("mount", "/dev/disk/by-label/nixos", "/mnt")
     if cfg.boot_mode == "uefi":
         os.makedirs("/mnt/boot", exist_ok=True)
-        run_cmd("mount", "/dev/disk/by-label/boot", "/mnt/boot")
+        run_cmd("mount", "-o", "umask=077", "/dev/disk/by-label/boot", "/mnt/boot")
 
 
 def setup_bios_partitions(disk: str) -> None:
