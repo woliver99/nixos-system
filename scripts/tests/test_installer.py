@@ -139,9 +139,9 @@ def main() -> None:
 
         inputs.append("y")  # Confirm drive wipe
 
-        # Passphrase inputs for cryptsetup if LUKS enabled (Format confirmation + password)
+        # Passphrase inputs for Enter and Confirm prompts
         if fs == "btrfs" and luks:
-            inputs.extend(["testpass123", "testpass123", "testpass123"])
+            inputs.extend(["testpass123", "testpass123"])
 
         inputs.append("n")  # Skip nixos-generate-config during rapid test runs
 

@@ -2,6 +2,7 @@ import os
 import subprocess
 from .utils import run_cmd, console
 from .ui import InstallConfig
+from rich.prompt import Prompt
 
 
 def cleanup_previous_mounts(part_prefix: str) -> None:
@@ -26,12 +27,20 @@ def setup_btrfs(cfg: InstallConfig) -> None:
     target_dev = f"{cfg.part_prefix}2"
 
     if cfg.use_luks:
-        console.print(
-            "\n[bold yellow]🔐 Setting up LUKS2 encryption. Enter your disk passphrase:[/bold yellow]"
-        )
-        # Wipe leftover partition headers so cryptsetup never asks to confirm overwriting
+        console.print("\n[bold yellow]🔐 Setting up LUKS2 encryption[/bold yellow]")
+        while True:
+            passphrase = Prompt.ask("Enter disk encryption passphrase", password=True)
+            confirm = Prompt.ask("Confirm disk encryption passphrase", password=True)
+            if passphrase == confirm:
+                break
+            console.print(
+                "[bold red]❌ Passphrases do not match. Try again.[/bold red]"
+            )
+
+        # Wipe leftover partition headers
         run_cmd("wipefs", "-af", f"{cfg.part_prefix}2")
 
+        # Format and open LUKS container using the captured passphrase
         subprocess.run(
             [
                 "cryptsetup",
@@ -39,12 +48,23 @@ def setup_btrfs(cfg: InstallConfig) -> None:
                 "-q",
                 "--type",
                 "luks2",
+                "--key-file",
+                "-",
                 f"{cfg.part_prefix}2",
             ],
+            input=passphrase.encode(),
             check=True,
         )
         subprocess.run(
-            ["cryptsetup", "open", f"{cfg.part_prefix}2", "enc-pv"],
+            [
+                "cryptsetup",
+                "open",
+                "--key-file",
+                "-",
+                f"{cfg.part_prefix}2",
+                "enc-pv",
+            ],
+            input=passphrase.encode(),
             check=True,
         )
         target_dev = "/dev/mapper/enc-pv"
