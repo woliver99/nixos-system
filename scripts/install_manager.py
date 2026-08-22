@@ -9,17 +9,28 @@ from rich.table import Table
 console = Console()
 
 
-def run_cmd(*cmd, shell=False, check=True, capture=False):
-    """Executes a system command and handles errors cleanly."""
+def run_cmd(*cmd: str, shell: bool = False, check: bool = True) -> None:
+    """Executes a system command without capturing output."""
+    try:
+        subprocess.run(
+            cmd if not shell else cmd[0], shell=shell, check=check, text=True
+        )
+    except subprocess.CalledProcessError as e:
+        console.print(f"[bold red]❌ Command failed:[/bold red] {e.cmd}")
+        sys.exit(1)
+
+
+def run_capture(*cmd: str, shell: bool = False, check: bool = True) -> str:
+    """Executes a command and returns stripped stdout."""
     try:
         result = subprocess.run(
             cmd if not shell else cmd[0],
             shell=shell,
             check=check,
             text=True,
-            capture_output=capture,
+            capture_output=True,
         )
-        return result.stdout.strip() if capture else True
+        return result.stdout.strip()
     except subprocess.CalledProcessError as e:
         console.print(f"[bold red]❌ Command failed:[/bold red] {e.cmd}")
         sys.exit(1)
@@ -32,7 +43,7 @@ def get_partition_prefix(disk: str) -> str:
 
 def display_drives():
     """Fetches and displays available block devices."""
-    output = run_cmd("lsblk -dpno NAME,SIZE,MODEL", shell=True, capture=True)
+    output = run_capture("lsblk -dpno NAME,SIZE,MODEL", shell=True)
     table = Table(
         title="Available Drives", show_header=True, header_style="bold magenta"
     )
@@ -71,87 +82,179 @@ def main():
             "Select Boot Mode", choices=["uefi", "bios"], default="uefi"
         )
         fs_choice = Prompt.ask(
-            "Select Root Filesystem", choices=["ext4", "f2fs"], default="ext4"
+            "Select Root Filesystem", choices=["ext4", "f2fs", "btrfs"], default="ext4"
         )
+
+        use_luks = False
+        use_impermanence = False
+        if fs_choice == "btrfs":
+            use_luks = Confirm.ask("Enable LUKS2 encryption?", default=True)
+            use_impermanence = Confirm.ask(
+                "Use ephemeral root on tmpfs (Impermanence / Erase Your Darlings)?",
+                default=False,
+            )
 
         console.print(
             f"\n[bold red]⚠️  WARNING: This will DESTROY ALL DATA on {disk}.[/bold red]"
         )
         if Confirm.ask("Are you absolutely sure?", default=False):
 
-            with console.status(
-                f"[bold green]Partitioning and Formatting {disk} for {boot_mode.upper()}..."
-            ) as status:
-                run_cmd("umount -R /mnt 2>/dev/null || true", shell=True, check=False)
+            run_cmd("umount -R /mnt 2>/dev/null || true", shell=True, check=False)
+            run_cmd(
+                f"umount -R {part_prefix}* 2>/dev/null || true", shell=True, check=False
+            )
+            run_cmd(
+                "cryptsetup close enc-pv 2>/dev/null || true", shell=True, check=False
+            )
+
+            if boot_mode == "uefi":
+                run_cmd("parted", "-s", disk, "--", "mklabel", "gpt")
                 run_cmd(
-                    f"umount -R {part_prefix}* 2>/dev/null || true",
-                    shell=True,
-                    check=False,
+                    "parted",
+                    "-s",
+                    disk,
+                    "--",
+                    "mkpart",
+                    "ESP",
+                    "fat32",
+                    "1MiB",
+                    "1024MiB",
+                )
+                run_cmd("parted", "-s", disk, "--", "set", "1", "esp", "on")
+                run_cmd(
+                    "parted",
+                    "-s",
+                    disk,
+                    "--",
+                    "mkpart",
+                    "primary",
+                    "1024MiB",
+                    "100%",
                 )
 
-                if boot_mode == "uefi":
-                    run_cmd("parted", "-s", disk, "--", "mklabel", "gpt")
+                run_cmd("mkfs.fat", "-F", "32", "-n", "boot", f"{part_prefix}1")
+                run_cmd("udevadm", "settle")
+
+                if fs_choice == "btrfs":
+                    target_dev = f"{part_prefix}2"
+
+                    if use_luks:
+                        console.print(
+                            "\n[bold yellow]🔐 Setting up LUKS2 encryption. Enter your disk passphrase:[/bold yellow]"
+                        )
+                        subprocess.run(
+                            [
+                                "cryptsetup",
+                                "luksFormat",
+                                "--type",
+                                "luks2",
+                                f"{part_prefix}2",
+                            ],
+                            check=True,
+                        )
+                        subprocess.run(
+                            ["cryptsetup", "open", f"{part_prefix}2", "enc-pv"],
+                            check=True,
+                        )
+                        target_dev = "/dev/mapper/enc-pv"
+
+                    # Format Btrfs partition and create shared subvolumes
+                    run_cmd("mkfs.btrfs", "-f", "-L", "nixos", target_dev)
+                    run_cmd("mount", target_dev, "/mnt")
+                    run_cmd("btrfs", "subvolume", "create", "/mnt/@nix")
+                    run_cmd("btrfs", "subvolume", "create", "/mnt/@home")
+
+                    if use_impermanence:
+                        run_cmd("btrfs", "subvolume", "create", "/mnt/@persist")
+                        run_cmd("umount", "/mnt")
+
+                        # Ephemeral root in RAM
+                        run_cmd(
+                            "mount",
+                            "-t",
+                            "tmpfs",
+                            "none",
+                            "/mnt",
+                            "-o",
+                            "size=4G,mode=755",
+                        )
+
+                        os.makedirs("/mnt/persist", exist_ok=True)
+                        run_cmd(
+                            "mount",
+                            "-o",
+                            "subvol=@persist,compress=zstd,autodefrag",
+                            target_dev,
+                            "/mnt/persist",
+                        )
+
+                        os.makedirs("/mnt/persist/etc/nixos", exist_ok=True)
+                        os.makedirs("/mnt/etc/nixos", exist_ok=True)
+                        run_cmd(
+                            "mount",
+                            "--bind",
+                            "/mnt/persist/etc/nixos",
+                            "/mnt/etc/nixos",
+                        )
+                    else:
+                        run_cmd("btrfs", "subvolume", "create", "/mnt/@root")
+                        run_cmd("umount", "/mnt")
+
+                        # Persistent root on disk
+                        run_cmd(
+                            "mount",
+                            "-o",
+                            "subvol=@root,compress=zstd,noatime",
+                            target_dev,
+                            "/mnt",
+                        )
+
+                    # Shared /home, /nix, and /boot mounts
+                    os.makedirs("/mnt/home", exist_ok=True)
                     run_cmd(
-                        "parted",
-                        "-s",
-                        disk,
-                        "--",
-                        "mkpart",
-                        "ESP",
-                        "fat32",
-                        "1MiB",
-                        "1024MiB",
-                    )
-                    run_cmd("parted", "-s", disk, "--", "set", "1", "esp", "on")
-                    run_cmd(
-                        "parted",
-                        "-s",
-                        disk,
-                        "--",
-                        "mkpart",
-                        "primary",
-                        "1024MiB",
-                        "100%",
+                        "mount",
+                        "-o",
+                        "subvol=@home,compress=zstd",
+                        target_dev,
+                        "/mnt/home",
                     )
 
-                    run_cmd("mkfs.fat", "-F", "32", "-n", "boot", f"{part_prefix}1")
+                    os.makedirs("/mnt/nix", exist_ok=True)
                     run_cmd(
-                        f"mkfs.{fs_choice}",
-                        "-f" if fs_choice == "f2fs" else "-F",
-                        "-L" if fs_choice == "ext4" else "-l",
-                        "nixos",
-                        f"{part_prefix}2",
+                        "mount",
+                        "-o",
+                        "subvol=@nix,compress=zstd,noatime",
+                        target_dev,
+                        "/mnt/nix",
                     )
 
-                    run_cmd("udevadm", "settle")
-                    run_cmd("mount", "/dev/disk/by-label/nixos", "/mnt")
                     os.makedirs("/mnt/boot", exist_ok=True)
                     run_cmd("mount", "/dev/disk/by-label/boot", "/mnt/boot")
 
-                elif boot_mode == "bios":
-                    run_cmd("parted", "-s", disk, "--", "mklabel", "msdos")
-                    run_cmd(
-                        "parted",
-                        "-s",
-                        disk,
-                        "--",
-                        "mkpart",
-                        "primary",
-                        "ext4",
-                        "1MiB",
-                        "100%",
-                    )
+            elif boot_mode == "bios":
+                run_cmd("parted", "-s", disk, "--", "mklabel", "msdos")
+                run_cmd(
+                    "parted",
+                    "-s",
+                    disk,
+                    "--",
+                    "mkpart",
+                    "primary",
+                    "ext4",
+                    "1MiB",
+                    "100%",
+                )
 
-                    run_cmd(
-                        f"mkfs.{fs_choice}",
-                        "-f" if fs_choice == "f2fs" else "-F",
-                        "-L" if fs_choice == "ext4" else "-l",
-                        "nixos",
-                        f"{part_prefix}1",
-                    )
+                run_cmd(
+                    f"mkfs.{fs_choice}",
+                    "-f" if fs_choice == "f2fs" else "-F",
+                    "-L" if fs_choice == "ext4" else "-l",
+                    "nixos",
+                    f"{part_prefix}1",
+                )
 
-                    run_cmd("udevadm", "settle")
-                    run_cmd("mount", "/dev/disk/by-label/nixos", "/mnt")
+                run_cmd("udevadm", "settle")
+                run_cmd("mount", "/dev/disk/by-label/nixos", "/mnt")
 
             console.print("[bold green]✅ Partitions created and mounted.[/bold green]")
         else:
