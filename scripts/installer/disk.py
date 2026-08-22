@@ -84,9 +84,11 @@ def setup_btrfs(cfg: InstallConfig) -> None:
 
     if cfg.use_impermanence:
         run_cmd("btrfs", "subvolume", "create", "/mnt/@persist")
+        run_cmd("btrfs", "subvolume", "create", "/mnt/@config")
         run_cmd("umount", "/mnt")
 
         run_cmd("mount", "-t", "tmpfs", "none", "/mnt", "-o", "size=4G,mode=755")
+
         os.makedirs("/mnt/persist", exist_ok=True)
         run_cmd(
             "mount",
@@ -96,9 +98,14 @@ def setup_btrfs(cfg: InstallConfig) -> None:
             "/mnt/persist",
         )
 
-        os.makedirs("/mnt/persist/etc/nixos", exist_ok=True)
         os.makedirs("/mnt/etc/nixos", exist_ok=True)
-        run_cmd("mount", "--bind", "/mnt/persist/etc/nixos", "/mnt/etc/nixos")
+        run_cmd(
+            "mount",
+            "-o",
+            "subvol=@config,compress=zstd",
+            target_dev,
+            "/mnt/etc/nixos",
+        )
     else:
         run_cmd("btrfs", "subvolume", "create", "/mnt/@root")
         run_cmd("umount", "/mnt")
