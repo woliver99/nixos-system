@@ -8,14 +8,16 @@ fi
 
 echo "🚀 Starting NixOS Pre-Install Bootstrapper..."
 
-PYTHON_SCRIPT_URL="https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/install_manager.py"
-PYTHON_SCRIPT_DEST="/tmp/install_manager.py"
+REPO_TARBALL_URL="https://github.com/woliver99/nixos-system/archive/refs/heads/master.tar.gz"
+TEMP_DIR="/tmp/nixos-installer"
 
-echo "Fetching Install Manager from repository..."
-curl -sL "$PYTHON_SCRIPT_URL" -o "$PYTHON_SCRIPT_DEST"
+echo "Fetching installer package from repository..."
+rm -rf "$TEMP_DIR"
+mkdir -p "$TEMP_DIR"
+curl -sL "$REPO_TARBALL_URL" | tar -xz -C "$TEMP_DIR" --strip-components=1
 
 echo "Launching Install Manager..."
-nix-shell -p "python313.withPackages (ps: with ps; [ rich ])" --run "python3 $PYTHON_SCRIPT_DEST"
+nix-shell -p "python313.withPackages (ps: with ps; [ rich ])" --run "python3 -m scripts.installer.main" --chdir "$TEMP_DIR"
 
 # Clean up
-rm -f "$PYTHON_SCRIPT_DEST"
+rm -rf "$TEMP_DIR"
