@@ -141,7 +141,7 @@ def main() -> None:
 
         # Passphrase inputs for cryptsetup if LUKS enabled (Format confirmation + password)
         if fs == "btrfs" and luks:
-            inputs.extend(["YES", "testpass123", "testpass123", "testpass123"])
+            inputs.extend(["testpass123", "testpass123", "testpass123"])
 
         inputs.append("n")  # Skip nixos-generate-config during rapid test runs
 

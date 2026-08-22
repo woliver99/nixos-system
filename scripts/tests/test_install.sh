@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# curl -sL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/tests/test_install.sh | sudo bash
+# curl -sL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/tests/test_install.sh -o /tmp/test_install.sh && sudo bash /tmp/test_install.sh && rm /tmp/test_install.sh
 set -e
 
 if [ "$EUID" -ne 0 ]; then
@@ -21,16 +21,7 @@ curl -sL "$REPO_TARBALL_URL" | tar -xz -C "$TEMP_DIR" --strip-components=1
 
 echo "🔧 Launching test runner inside Nix environment..."
 cd "$TEMP_DIR"
-nix-shell -p \
-  "python313.withPackages (ps: with ps; [ rich ])" \
-  parted \
-  cryptsetup \
-  btrfs-progs \
-  e2fsprogs \
-  f2fs-tools \
-  dosfstools \
-  util-linux \
-  --run "python3 scripts/tests/test_installer.py"
+nix-shell "$TEMP_DIR/scripts/installer/shell.nix" --run "python3 scripts/tests/test_installer.py"
 
 # Clean up repository files after test completion
 rm -rf "$TEMP_DIR"

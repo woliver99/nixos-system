@@ -29,8 +29,18 @@ def setup_btrfs(cfg: InstallConfig) -> None:
         console.print(
             "\n[bold yellow]🔐 Setting up LUKS2 encryption. Enter your disk passphrase:[/bold yellow]"
         )
+        # Wipe leftover partition headers so cryptsetup never asks to confirm overwriting
+        run_cmd("wipefs", "-af", f"{cfg.part_prefix}2")
+
         subprocess.run(
-            ["cryptsetup", "luksFormat", "--type", "luks2", f"{cfg.part_prefix}2"],
+            [
+                "cryptsetup",
+                "luksFormat",
+                "-q",
+                "--type",
+                "luks2",
+                f"{cfg.part_prefix}2",
+            ],
             check=True,
         )
         subprocess.run(
