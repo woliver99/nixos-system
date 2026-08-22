@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 from .utils import run_cmd, console
 from .ui import InstallConfig
@@ -28,9 +29,16 @@ def setup_btrfs(cfg: InstallConfig) -> None:
 
     if cfg.use_luks:
         console.print("\n[bold yellow]🔐 Setting up LUKS2 encryption[/bold yellow]")
+        # Use password masking only if running in an interactive terminal
+        is_interactive = sys.stdin.isatty()
+
         while True:
-            passphrase = Prompt.ask("Enter disk encryption passphrase", password=True)
-            confirm = Prompt.ask("Confirm disk encryption passphrase", password=True)
+            passphrase = Prompt.ask(
+                "Enter disk encryption passphrase", password=is_interactive
+            )
+            confirm = Prompt.ask(
+                "Confirm disk encryption passphrase", password=is_interactive
+            )
             if passphrase == confirm:
                 break
             console.print(
