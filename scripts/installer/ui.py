@@ -51,7 +51,7 @@ def prompt_install_config(part_prefix_fn) -> InstallConfig:
     part_prefix = part_prefix_fn(disk)
     boot_mode = Prompt.ask("Select Boot Mode", choices=["uefi", "bios"], default="uefi")
     fs_choice = Prompt.ask(
-        "Select Root Filesystem", choices=["ext4", "f2fs", "btrfs"], default="btrfs"
+        "Select Root Filesystem", choices=["ext4", "f2fs", "btrfs"], default="ext4"
     )
 
     use_luks = False
