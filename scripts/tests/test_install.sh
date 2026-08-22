@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# curl -sL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/test_install.sh | sudo bash
+# curl -sL https://raw.githubusercontent.com/woliver99/nixos-system/refs/heads/master/scripts/tests/test_install.sh | sudo bash
 set -e
 
 if [ "$EUID" -ne 0 ]; then
@@ -29,7 +29,7 @@ nix-shell -p \
   f2fs-tools \
   dosfstools \
   util-linux \
-  --run "python3 $TEMP_DIR/scripts/tests/test_installer.py" --chdir "$TEMP_DIR"
+  --run "python3 scripts/tests/test_installer.py" --chdir "$TEMP_DIR"
 
 # Clean up repository files after test completion
 rm -rf "$TEMP_DIR"
