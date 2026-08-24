@@ -27,4 +27,7 @@
   nix.settings.auto-optimise-store = true; # No reason not to use this
   features.cleanup.enable = true;
   maplenetwork.localCache.enable = lib.mkDefault true;
+
+  services.timesyncd.enable = false;
+  services.chrony.enable = true;
 }

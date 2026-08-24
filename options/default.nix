@@ -9,5 +9,8 @@
     ./colmena-deploy.nix
     ./maintenance.nix
     ./podman.nix
+
+    ./profiles/flatpak.nix
+    ./profiles/bitwarden.nix
   ];
 }
