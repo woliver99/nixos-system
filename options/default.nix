@@ -12,5 +12,10 @@
 
     ./profiles/flatpak.nix
     ./profiles/bitwarden.nix
+
+    ./system/luks.nix
+    ./system/secureboot.nix
+    ./system/fingerprint.nix
+    ./system/impermanence.nix
   ];
 }
