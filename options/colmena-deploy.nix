@@ -14,6 +14,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    features.autoUpdate.enable = false;
+
     users.groups.colmena-deploy = { };
 
     users.users.colmena-deploy = {
