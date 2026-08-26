@@ -19,6 +19,11 @@ in
     # sudo mkdir -p /persist/passwords && nix-shell -p mkpasswd --run "mkpasswd -m yescrypt" | sudo tee /persist/passwords/woliver99 && sudo chmod 600 /persist/passwords/woliver99
     # users.users.woliver99.hashedPasswordFile = "/persist/passwords/woliver99";
 
+    maple.system = {
+      swap.path = lib.mkDefault "/persist/swapfile";
+      hibernate.resumeDevice = lib.mkDefault (config.fileSystems."/persist".device or null);
+    };
+
     # Disable the first-run lecture on ephemeral tmpfs root
     security.sudo.extraConfig = ''
       Defaults lecture = never
