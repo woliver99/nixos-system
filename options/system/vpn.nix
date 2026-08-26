@@ -14,7 +14,7 @@ in
 
     wireguardPorts = lib.mkOption {
       type = lib.types.listOf lib.types.port;
-      default = [ ];
+      default = [ 51820 ];
       description = "List of UDP ports used by WireGuard interfaces.";
     };
   };
