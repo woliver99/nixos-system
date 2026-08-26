@@ -47,17 +47,19 @@ in
     );
 
     boot.kernelParams = [
-      "mem_sleep_default=deep"
       "secretmem.enable=0"
     ]
     ++ lib.optional (config.boot.resumeDevice != null) "resume=${config.boot.resumeDevice}"
     ++ lib.optional (swapCfg.resumeOffset != null) "resume_offset=${toString swapCfg.resumeOffset}";
 
-    services.logind.settings.Login.HandleLidSwitch = cfg.lidSwitch;
+    services.logind.settings.Login = {
+      HandleLidSwitch = cfg.lidSwitch;
+      LidSwitchIgnoreInhibited = "yes";
+    };
 
     systemd.sleep.settings.Sleep = {
       HibernateDelaySec = cfg.delay;
-      SuspendState = "mem";
+      HibernateMode = "shutdown"; # Disable resume after hibernate command ran
     };
 
     assertions = [
