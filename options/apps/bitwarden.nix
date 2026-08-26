@@ -24,6 +24,17 @@ in
       SSH_AUTH_SOCK = "$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock";
     };
 
+    # Forward ssh agent - TODO: Find alternative than ssh forwarding
+    programs.ssh.extraConfig = ''
+      # Automatically resolve short names using your local search domain
+      CanonicalizeHostname yes
+      CanonicalDomains lan.maplenetwork.ca
+
+      # Matches after canonicalization expands "edge" to "edge.lan.maplenetwork.ca"
+      Host *.lan.maplenetwork.ca
+        ForwardAgent yes
+    '';
+
     # Allow biometric unlock
     environment.systemPackages = with pkgs; [
       (writeTextFile {
