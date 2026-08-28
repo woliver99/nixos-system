@@ -51,6 +51,7 @@ in
         alacritty # Better Terminal
         gparted # Better file partitions
         file-roller # Archive viewer
+        nvtopPackages.full # Htop for gpu
       ];
     })
   ];

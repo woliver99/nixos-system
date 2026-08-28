@@ -22,6 +22,7 @@ in
 
       maple.apps = {
         localsend.enable = lib.mkDefault true;
+        rustdesk.enable = lib.mkDefault true;
         thunderbird.enable = lib.mkDefault true;
         gimp.enable = lib.mkDefault true;
       };

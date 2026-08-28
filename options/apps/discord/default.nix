@@ -28,6 +28,8 @@ in
         Exec=flatpak run dev.vencord.Vesktop --enable-speech-dispatcher --start-minimized
         X-Flatpak=dev.vencord.Vesktop
       ''}"
+      "C+ %h/.var/app/dev.vencord.Vesktop/config/vesktop/userAssets/tray - - - - ${./icon.png}"
+      "C+ %h/.var/app/dev.vencord.Vesktop/config/vesktop/userAssets/trayUnread - - - - ${./icon.png}"
     ];
   };
 }
