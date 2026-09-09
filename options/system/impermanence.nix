@@ -12,7 +12,7 @@ let
 in
 {
   options.maple.system.impermanence = {
-    enable = lib.mkEnableOption "My working impermanence setup";
+    enable = lib.mkEnableOption "My old working impermanence setup (stopped using it since its more hassle than its worth)";
   };
 
   config = lib.mkIf cfg.enable {

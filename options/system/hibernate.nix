@@ -49,7 +49,7 @@ in
     boot.kernelParams = [
       "secretmem.enable=0"
     ]
-    ++ lib.optional (config.boot.resumeDevice != null) "resume=${config.boot.resumeDevice}"
+    #++ lib.optional (config.boot.resumeDevice != null) "resume=${config.boot.resumeDevice}" # Automatically gets added
     ++ lib.optional (swapCfg.resumeOffset != null) "resume_offset=${toString swapCfg.resumeOffset}";
 
     services.logind.settings.Login = {
