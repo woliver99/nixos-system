@@ -44,6 +44,18 @@ in
       programs.appimage = {
         enable = lib.mkDefault true;
         binfmt = lib.mkDefault true;
+        package = pkgs.appimage-run.override {
+          extraPkgs = pkgs: [
+            pkgs.libepoxy
+            pkgs.libva
+            pkgs.libvdpau
+            pkgs.gnutls
+            pkgs.libunwind
+            pkgs.lcms2
+            pkgs.libarchive
+            pkgs.libxv
+          ];
+        };
       };
 
       environment.systemPackages = with pkgs; [

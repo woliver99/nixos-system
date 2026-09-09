@@ -17,7 +17,7 @@ in
 
     delay = lib.mkOption {
       type = lib.types.str;
-      default = "1m";
+      default = "5m";
       description = "Delay before transitioning from suspend to hibernate (e.g. 1m, 30m, 2h).";
     };
 

@@ -25,7 +25,7 @@ in
     systemd.services.flatpak-managed-install = {
       description = "Flatpak subsystem and management.";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         Type = "oneshot";

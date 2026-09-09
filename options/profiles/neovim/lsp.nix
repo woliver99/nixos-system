@@ -11,6 +11,7 @@
       cssls.enable = true;
       ts_ls.enable = true;
       lua_ls.enable = true;
+      dartls.enable = true;
 
       rust_analyzer = {
         enable = true;
