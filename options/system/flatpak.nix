@@ -25,16 +25,35 @@ in
     systemd.services.flatpak-managed-install = {
       description = "Flatpak subsystem and management.";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
       };
-      path = [ pkgs.flatpak ];
+      path = [
+        pkgs.flatpak
+        pkgs.curl
+      ];
+
       script = ''
+        echo "Waiting for internet connection to Flathub..."
+        connected=0
+        for i in $(seq 1 15); do
+          if curl -s --head --fail --connect-timeout 2 https://dl.flathub.org/repo/flathub.flatpakrepo >/dev/null 2>&1; then
+            connected=1
+            break
+          fi
+          sleep 2
+        done
+
+        if [ "$connected" -eq 0 ]; then
+          echo "Network unavailable after timeout; skipping Flatpak installation for now."
+          exit 0
+        fi
+
         # Flathub repo
-        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
         # Install declared packages
         ${lib.concatMapStringsSep "\n" (pkg: ''
