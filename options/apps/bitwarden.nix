@@ -30,8 +30,7 @@ in
       CanonicalizeHostname yes
       CanonicalDomains lan.maplenetwork.ca
 
-      # Matches after canonicalization expands "edge" to "edge.lan.maplenetwork.ca"
-      Host *.lan.maplenetwork.ca
+      Host *.maplenetwork.ca
         ForwardAgent yes
     '';
 
