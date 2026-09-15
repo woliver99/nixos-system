@@ -83,6 +83,11 @@ in
         maxPoolPercent = targetPercent;
         shrinkerEnabled = cfg.shrinker;
       };
+
+      # FIX: kernel not respecting shrinker params
+      systemd.tmpfiles.rules = [
+        "w /sys/module/zswap/parameters/shrinker_enabled - - - - ${if cfg.shrinker then "1" else "0"}"
+      ];
     })
 
     # No disk swap -> zram
