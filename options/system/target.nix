@@ -21,7 +21,6 @@ in
   config = lib.mkMerge [
     (lib.mkIf (cfg == "headless") {
       maple.profiles.ssh.enable = lib.mkDefault true;
-      profiles.proxmox.enable = lib.mkDefault true;
       maplenetwork.colmenaDeploy.enable = lib.mkDefault true;
 
       features.podman = {

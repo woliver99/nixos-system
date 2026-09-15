@@ -10,6 +10,7 @@ in
 {
   imports = [
     ./options
+    ./deprecations.nix
   ];
 
   options.maple.defaults = {
