@@ -49,6 +49,29 @@ in
       default = "zstd";
       description = "Compression algorithm (e.g. zstd, lz4).";
     };
+
+    shrinker = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to proactively evict the coldest compressed pages from the zswap
+        pool to physical disk swap under general memory pressure, before the pool
+        limit is actually reached.
+
+        When to keep `false` (Default):
+          - Workstations, laptops, and typical hosting/service VMs.
+          - Minimizes SSD write wear and storage latency by holding compressed
+            pages in fast RAM until `percent` (max pool size) is genuinely full.
+
+        When to set `true`:
+          - Severely memory-constrained systems (e.g. <= 4GB RAM) undergoing high
+            memory churn, such as dedicated build nodes, heavy compilers, or active
+            database servers.
+          - Prioritizes preserving uncompressed RAM for the Linux filesystem page
+            cache and prevents sudden writeback stalls during memory spikes, at the
+            cost of increased disk swap writes.
+      '';
+    };
   };
 
   config = lib.mkMerge [
@@ -58,7 +81,7 @@ in
         enable = true;
         compressor = cfg.algorithm;
         maxPoolPercent = targetPercent;
-        shrinkerEnabled = true;
+        shrinkerEnabled = cfg.shrinker;
       };
     })
 

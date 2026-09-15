@@ -1,37 +1,41 @@
 { ... }:
 
 {
-  imports = [
-    # -- Common --
-    ./nixos-system/common/desktop.nix # Common desktop config for every system
+  maple = {
+    system = {
+      target = "graphical";
+      hardware = {
+        enable = true;
+        #ramGb = 32; # System ram size for system recommendations
+        #storageType = "ssd"; # Boot storage storage type for system recommendations
+      };
 
-    # -- Modules --
-    ./nixos-system/modules/editor/nixvim # Neovim set up with a custom config
-    #./nixos-system/modules/flash-storage.nix # Adds optimisations for sd card storage lifespan
-    #./nixos-system/modules/zattoo # Zattoo tv app
+      # Laptop settings
+      #hibernate.enable = true; # Swap needed
+      #swap.resumeOffset = 12228360; # Needed for hibernate, check description
+      #powerProfiles.enable = true; # Auto preformance/power-saving mode when connected to power
+      #autoWifi.enable = true; # Disabled wifi when ethernet connects
 
-    # Users
-    ./nixos-system/presets/users/user.nix # Import your user here
-    #./nixos-system/presets/users/woliver99.nix # Admin user
+      #drawingTablet.enable = true;
+    };
 
-    # Profiles
-    ./nixos-system/modules/profiles/hardware/msi-gl65-leopard-10sfk.nix
-    ./nixos-system/modules/profiles/display-manager/gnome.nix # Select your desktop environment here
-    ./nixos-system/modules/profiles/apps/full.nix # Select your apps preset here
+    users.woliver99 = {
+      enable = true;
+      hidden = false;
+    };
 
-    # Features
-    ./nixos-system/features/firewall.nix # Enables the system firewall
-    ./nixos-system/features/auto-update.nix # Auto updates weekly and waits for a reboot to apply changes
-    ./nixos-system/features/flatpak.nix # Installs Flatpak for easy sandbox app installs for users
-    ./nixos-system/features/printers.nix # Adds support for most printers
-    ./nixos-system/features/vpn.nix # Adds support for most vpns
-    ./nixos-system/features/ssh.nix # Installs ssh only accessible via public keys
-    #./nixos-system/features/remote-desktop.nix # Installs gnome remote desktop which works over rdp
-    #./nixos-system/features/steam.nix # Installs Steam
-    #./nixos-system/features/obs.nix # Installs OBS
-    #./nixos-system/features/drawing-tablet.nix # Adds support for most drawing tablets
-    #./nixos-system/features/bitwarden-ssh-agent.nix # Allows the bitwarden flatpak to act as a ssh agent
-  ];
+    desktops.gnome = {
+      enable = true;
+      #remoteDesktop = true;
+    };
 
-  #users.users.woliver99.hidden = true; # Hide admin user from desktop
+    presets.apps = {
+      #gamer = true;
+    };
+
+    apps = {
+      #bitwarden.enable = true;
+      #zattoo.enable = true;
+    };
+  };
 }
