@@ -26,16 +26,19 @@ in
       ];
     };
 
-    programs.git.config = {
-      user = {
-        name = "woliver99";
-        email = "oliver@maplenetwork.ca";
-        signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoW8s3QavyRRSUlMAUiEmgz/E0/FbzJaajxZ+lxhPnS";
-      };
-
-      url."git@github.com:woliver99/" = {
-        insteadOf = "https://github.com/woliver99/";
-      };
-    };
+    programs.git.config = lib.mkMerge [
+      {
+        user = {
+          name = "woliver99";
+          email = "oliver@maplenetwork.ca";
+          signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDoW8s3QavyRRSUlMAUiEmgz/E0/FbzJaajxZ+lxhPnS";
+        };
+      }
+      (lib.mkIf config.maple.apps.bitwarden.enable {
+        url."git@github.com:woliver99/" = {
+          insteadOf = "https://github.com/woliver99/";
+        };
+      })
+    ];
   };
 }
