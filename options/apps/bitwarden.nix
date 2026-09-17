@@ -24,6 +24,12 @@ in
       SSH_AUTH_SOCK = "$HOME/.var/app/com.bitwarden.desktop/data/.bitwarden-ssh-agent.sock";
     };
 
+    # Sign commits with agent
+    programs.git.config = {
+      gpg.format = "ssh"; # Tell Git to use SSH for signing instead of GPG
+      commit.gpgsign = true; # Turn on signing automatically for every single commit you make
+    };
+
     # Forward ssh agent - TODO: Find alternative than ssh forwarding
     programs.ssh.extraConfig = ''
       # Automatically resolve short names using your local search domain

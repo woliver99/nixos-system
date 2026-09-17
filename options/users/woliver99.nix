@@ -36,12 +36,6 @@ in
       url."git@github.com:woliver99/" = {
         insteadOf = "https://github.com/woliver99/";
       };
-
-      # Tell Git to use SSH for signing instead of GPG
-      gpg.format = "ssh";
-
-      # Turn on signing automatically for every single commit you make
-      commit.gpgsign = true;
     };
   };
 }
