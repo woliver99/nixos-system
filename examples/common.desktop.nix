@@ -31,6 +31,7 @@
 
     presets.apps = {
       #gamer = true;
+      #developer = true;
     };
 
     apps = {

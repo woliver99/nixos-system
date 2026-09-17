@@ -45,7 +45,7 @@ in
       ];
     })
 
-    (lib.mkIf cfg.developer {
+    (lib.mkIf cfg.gamer {
       maple.apps = {
         steam.enable = lib.mkDefault true;
         discord.enable = lib.mkDefault true;
